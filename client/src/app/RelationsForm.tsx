@@ -1,4 +1,5 @@
 import React from 'react';
+import './RelationsForm.css'
 import {$relationsFormStore, fetchRawExtractedRelations, relationsFormApi} from './store';
 import {useStore} from 'effector-react';
 
@@ -29,12 +30,13 @@ export function RelationsForm() {
             />
         </div>;
 
-    return <div>
-        <div style={{marginBottom: "1em", marginTop: "1em"}}>
+    return <div className="RelationsForm">
+        <div className="RelationsForm-Inputs">
             {entity1Component}
             {entity2Component}
         </div>
         <button
+            className="btn btn-primary"
             onClick={() => fetchRawExtractedRelations({id1: relationsFormValues.id1, id2: relationsFormValues.id2})}>
             Make request
         </button>

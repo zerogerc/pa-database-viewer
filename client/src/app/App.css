@@ -1,3 +1,7 @@
 .App {
+    padding-top: 2rem;
+    padding-left: 8rem;
+    padding-right: 8rem;
+    display: grid;
     text-align: center;
 }

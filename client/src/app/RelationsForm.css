@@ -1,0 +1,12 @@
+.RelationsForm {
+    align-content: center;
+    margin-bottom: 1rem;
+}
+
+.RelationsForm-Inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 2rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
