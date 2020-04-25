@@ -10,23 +10,23 @@ from server.config import SERVER_CONFIG
 from server.views.main import MainHandler
 from server.views.relations import RelationsHandler
 
-define('port', default=8888, help='port to listen on')
-define('debug', default=True, help='run in debug mode')
+define('port', type=int, default=8888, help='port to listen on')
+define('debug', type=bool, default=False, help='run in debug mode')
+define('pa_db_path', type=str, default='', help='path to paper-analyzer database')
+define('index_path', type=str, default='', help='path to index.html')
+define('static_dir', type=str, default='', help='path to static files')
 
 
 def main():
-    index_path = Path('/Users/Uladzislau.Sazanovich/dev/pa-database-viewer/client/build/index.html')
-    static_dir = Path('/Users/Uladzislau.Sazanovich/dev/pa-database-viewer/client/build/static')
-    pa_db_path = Path('/Users/Uladzislau.Sazanovich/dev/data/pa/paper-analyzer.db')
-
+    tornado.options.parse_command_line()
     SERVER_CONFIG.debug = options.debug
 
     handlers = [
-        (f'/relations', RelationsHandler, dict(pa_db_path=pa_db_path)),
+        (f'/relations', RelationsHandler, dict(pa_db_path=Path(options.pa_db_path))),
     ]
     if not options.debug:
-        handlers.append(('/', MainHandler, dict(index_path=index_path)))
-        handlers.append((r'/static/(.*)', tornado.web.StaticFileHandler, {'path': static_dir}))
+        handlers.append(('/', MainHandler, dict(index_path=Path(options.index_path))))
+        handlers.append((r'/static/(.*)', tornado.web.StaticFileHandler, {'path': Path(options.static_dir)}))
 
     app = Application(handlers)
     http_server = HTTPServer(app)
