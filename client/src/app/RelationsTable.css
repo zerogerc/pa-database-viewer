@@ -1,0 +1,20 @@
+.RelationsTable {
+
+}
+
+.RelationsTable-List {
+    list-style: none;
+    padding-left: 0;
+}
+
+.RelationsTable-Row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    text-align: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.RelationsTable-Row-Header {
+    font-weight: bold;
+}
