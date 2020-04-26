@@ -23,12 +23,14 @@ export class Api {
         return this._instance;
     }
 
-    static getRawExtractedRelations(id1: string, id2: string, pmid: string): Promise<AxiosResponse<Array<RawExtractedRelation>>> {
+    static getRawExtractedRelations(id1: string, id2: string, pmid: string,
+                                    onlyNovel: boolean): Promise<AxiosResponse<Array<RawExtractedRelation>>> {
         return Api.Instance().axiosInstance.get('/relations', {
             params: {
                 id1: id1,
                 id2: id2,
-                pmid: pmid
+                pmid: pmid,
+                only_novel: onlyNovel ? 1 : 0,
             }
         })
     }

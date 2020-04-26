@@ -4,8 +4,9 @@ import {Api} from './api';
 
 export const $relationsFormStore: Store<RelationsFormValues> = createStore<RelationsFormValues>({
     id1: '',
-    id2: 'MESH:C000657245',
+    id2: 'MESH:C000657245', // COVID-19
     pmid: '',
+    onlyNovel: false,
 });
 
 export const relationsFormApi = createApi($relationsFormStore, {
@@ -17,18 +18,22 @@ export const relationsFormApi = createApi($relationsFormStore, {
     },
     setPmid: (form, pmid: string) => {
         return {...form, pmid: pmid};
+    },
+    setOnlyNovel: (form, onlyNovel: boolean) => {
+        return {...form, onlyNovel};
     }
 });
 
 export interface FetchRawExtractedRelationsParams {
     id1: string,
     id2: string,
-    pmid: string
+    pmid: string,
+    onlyNovel: boolean,
 }
 
 export const fetchRawExtractedRelations = createEffect<FetchRawExtractedRelationsParams, Array<RawExtractedRelation>>({
     async handler(params) {
-        const res = await Api.getRawExtractedRelations(params.id1, params.id2, params.pmid);
+        const res = await Api.getRawExtractedRelations(params.id1, params.id2, params.pmid, params.onlyNovel);
         return res.data;
     }
 });

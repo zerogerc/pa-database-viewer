@@ -18,10 +18,14 @@ class RelationsHandler(BaseRequestHandler):
         self._db = None
 
     def get(self) -> None:
+        only_novel_arg = self.get_argument('only_novel', '')
+        only_novel = int(only_novel_arg) if only_novel_arg.isnumeric() else 0
+
         data = list(self.db.get_raw_relations(
-            id1=self.get_argument('id1', ''),
-            id2=self.get_argument('id2', ''),
-            pmid=self.get_argument('pmid', ''),
+            id1=self.get_argument('id1', None),
+            id2=self.get_argument('id2', None),
+            pmid=self.get_argument('pmid', None),
+            in_ctd=0 if only_novel else None
         ))
         self.send_response(data)
 

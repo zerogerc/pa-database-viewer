@@ -1,7 +1,7 @@
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any, Iterator, Optional
 
-from sqlalchemy import create_engine, MetaData, Table, Column, Float, String, select, func, desc
+from sqlalchemy import create_engine, MetaData, Table, Column, Float, String, select, func, desc, Integer
 
 metadata = MetaData()
 
@@ -16,6 +16,7 @@ RELATIONS_TABLE = Table(
     Column('label', String),
     Column('pmid', String),
     Column('prob', Float),
+    Column('in_ctd', Integer)
 )
 
 
@@ -24,7 +25,7 @@ class PaperAnalyzerDatabase:
     def __init__(self, db_path: Path):
         self.db_engine = create_engine('sqlite:///{}'.format(db_path))
 
-    def get_raw_relations(self, id1: str, id2: str, pmid: str) -> Iterator[Any]:
+    def get_raw_relations(self, id1: str, id2: str, pmid: str, in_ctd: Optional[int] = None) -> Iterator[Any]:
         with self.db_engine.connect() as connection:
             query = select([RELATIONS_TABLE])
 
@@ -34,6 +35,8 @@ class PaperAnalyzerDatabase:
                 query = query.where(RELATIONS_TABLE.columns.id2 == id2)
             if pmid:
                 query = query.where(RELATIONS_TABLE.columns.pmid == pmid)
+            if in_ctd is not None:
+                query = query.where(RELATIONS_TABLE.columns.in_ctd == in_ctd)
 
             query = query.order_by(desc(RELATIONS_TABLE.columns.prob)).limit(100)
             yield from (dict(row) for row in connection.execute(query))

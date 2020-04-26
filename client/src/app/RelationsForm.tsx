@@ -30,11 +30,24 @@ export function RelationsForm() {
             relationsFormApi.setPmid(e.currentTarget.value);
         }}/>;
 
+    const onlyNovelComponent =
+        <div className="form-check">
+            <input
+                id="form-novel"
+                className="form-check-input" type="checkbox"
+                checked={relationsFormValues.onlyNovel}
+                onChange={(e: React.FormEvent<HTMLInputElement>) => {
+                    relationsFormApi.setOnlyNovel(e.currentTarget.checked)
+                }}/>
+            <label htmlFor="form-novel" className="form-check-label">Only novel</label>
+        </div>;
+
     return <div className="RelationsForm">
         <div className="RelationsForm-Inputs">
             {entity1Component}
             {entity2Component}
             {pmidComponent}
+            {onlyNovelComponent}
         </div>
         <button
             className="btn btn-primary"
@@ -42,6 +55,7 @@ export function RelationsForm() {
                 id1: relationsFormValues.id1,
                 id2: relationsFormValues.id2,
                 pmid: relationsFormValues.pmid,
+                onlyNovel: relationsFormValues.onlyNovel,
             })}>
             Make request
         </button>
@@ -56,7 +70,7 @@ interface FormTextInputProps {
 }
 
 function FormTextInput(props: FormTextInputProps) {
-    return <div>
+    return <div className="form-group">
         <label htmlFor={props.id}>{props.label}</label>
         <input className="form-control form-control-sm" id={props.id}
                onChange={props.onChange} value={props.value}
