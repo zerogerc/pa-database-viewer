@@ -18,12 +18,12 @@ class RelationsHandler(BaseRequestHandler):
         self._db = None
 
     def get(self) -> None:
-        data = list(self.db.get_raw_relations_by_ids(id1=self.get_argument('id1'), id2=self.get_argument('id2')))
+        data = list(self.db.get_raw_relations(
+            id1=self.get_argument('id1', ''),
+            id2=self.get_argument('id2', ''),
+            pmid=self.get_argument('pmid', ''),
+        ))
         self.send_response(data)
-
-    # def get(self, id1: str, id2: str) -> None:
-    #     data = list(self.db.get_raw_relations_by_ids(id1=id1, id2=id2))
-    #     self.send_response(data)
 
     @property
     def db(self) -> PaperAnalyzerDatabase:

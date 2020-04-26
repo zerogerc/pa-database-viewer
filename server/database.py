@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Any, Iterator
 
-from sqlalchemy import create_engine, MetaData, Table, Column, Float, String, select, func
+from sqlalchemy import create_engine, MetaData, Table, Column, Float, String, select, func, desc
 
 metadata = MetaData()
 
@@ -24,11 +24,18 @@ class PaperAnalyzerDatabase:
     def __init__(self, db_path: Path):
         self.db_engine = create_engine('sqlite:///{}'.format(db_path))
 
-    def get_raw_relations_by_ids(self, id1: str, id2: str) -> Iterator[Any]:
+    def get_raw_relations(self, id1: str, id2: str, pmid: str) -> Iterator[Any]:
         with self.db_engine.connect() as connection:
-            query = select([RELATIONS_TABLE]) \
-                .where(RELATIONS_TABLE.columns.id1 == id1) \
-                .where(RELATIONS_TABLE.columns.id2 == id2)
+            query = select([RELATIONS_TABLE])
+
+            if id1:
+                query = query.where(RELATIONS_TABLE.columns.id1 == id1)
+            if id2:
+                query = query.where(RELATIONS_TABLE.columns.id2 == id2)
+            if pmid:
+                query = query.where(RELATIONS_TABLE.columns.pmid == pmid)
+
+            query = query.order_by(desc(RELATIONS_TABLE.columns.prob)).limit(100)
             yield from (dict(row) for row in connection.execute(query))
 
 
