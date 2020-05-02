@@ -51,13 +51,10 @@ export function RelationsForm() {
         </div>
         <button
             className="btn btn-primary"
-            onClick={() => fetchRawExtractedRelations({
-                id1: relationsFormValues.id1,
-                id2: relationsFormValues.id2,
-                pmid: relationsFormValues.pmid,
-                onlyNovel: relationsFormValues.onlyNovel,
-                page: 0,
-            })}>
+            onClick={() => {
+                fetchRawExtractedRelations($relationsFormStore.getState());
+                relationsFormApi.setPage(1);
+            }}>
             Make request
         </button>
     </div>;

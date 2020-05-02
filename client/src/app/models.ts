@@ -14,5 +14,6 @@ export interface RelationsFormValues {
     id1: string,
     id2: string,
     pmid: string,
-    onlyNovel: boolean
+    onlyNovel: boolean,
+    page: number,
 }

@@ -1,12 +1,13 @@
 import {createApi, createEffect, createStore, Store} from 'effector';
 import {RelationsFormValues} from './models';
-import {Api, FetchRawExtractedRelationsParams, FetchRawExtractedRelationsResponse} from './api';
+import {Api, FetchRawExtractedRelationsResponse} from './api';
 
 export const $relationsFormStore: Store<RelationsFormValues> = createStore<RelationsFormValues>({
     id1: '',
-    id2: 'MESH:C000657245', // COVID-19
+    id2: 'MESH:C000657245', // COVID-19 infection
     pmid: '',
     onlyNovel: false,
+    page: 1,
 });
 
 export const relationsFormApi = createApi($relationsFormStore, {
@@ -21,13 +22,22 @@ export const relationsFormApi = createApi($relationsFormStore, {
     },
     setOnlyNovel: (form, onlyNovel: boolean) => {
         return {...form, onlyNovel};
+    },
+    setPage: (form, page: number) => {
+        return {...form, page};
     }
 });
 
 export const fetchRawExtractedRelations =
-    createEffect<FetchRawExtractedRelationsParams, FetchRawExtractedRelationsResponse>({
-        async handler(params) {
-            const res = await Api.fetchRawExtractedRelations(params);
+    createEffect<RelationsFormValues, FetchRawExtractedRelationsResponse>({
+        async handler(values: RelationsFormValues) {
+            const res = await Api.fetchRawExtractedRelations({
+                id1: values.id1,
+                id2: values.id2,
+                pmid: values.pmid,
+                onlyNovel: values.onlyNovel,
+                page: values.page,
+            });
             return res.data;
         }
     });
@@ -35,7 +45,7 @@ export const fetchRawExtractedRelations =
 export const $rawExtractedRelationsStore: Store<FetchRawExtractedRelationsResponse> =
     createStore<FetchRawExtractedRelationsResponse>({
         relations: [],
-        page: 0,
+        page: 1,
         totalPages: 0,
     });
 

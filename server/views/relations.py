@@ -14,13 +14,13 @@ class RelationsHandler(BaseRequestHandler):
     def __init__(self, application: tornado.web.Application,
                  request: httputil.HTTPServerRequest, *, pa_db_path: Path, **kwargs: Any) -> None:
         super().__init__(application, request, **kwargs)
-        self.relations_per_page = 300
+        self.relations_per_page = 10
         self.pa_db_path = pa_db_path
         self._db = None
 
     def get(self) -> None:
         only_novel = self.get_numeric_argument('only_novel', default=0)
-        page = self.get_numeric_argument('page', default=0)
+        page = self.get_numeric_argument('page', default=1)
 
         relations = list(self.db.get_raw_relations(
             id1=self.get_argument('id1', None),
@@ -34,7 +34,7 @@ class RelationsHandler(BaseRequestHandler):
         page = min(page, total_pages)
 
         self.send_response({
-            'relations': relations,
+            'relations': relations[self.relations_per_page * (page - 1): self.relations_per_page * page],
             'page': page,
             'totalPages': total_pages,
         })
