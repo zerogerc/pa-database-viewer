@@ -56,6 +56,7 @@ export function RelationsForm() {
                 id2: relationsFormValues.id2,
                 pmid: relationsFormValues.pmid,
                 onlyNovel: relationsFormValues.onlyNovel,
+                page: 0,
             })}>
             Make request
         </button>

@@ -1,6 +1,20 @@
 import axios, {AxiosInstance, AxiosResponse} from 'axios';
 import {RawExtractedRelation} from './models';
 
+export interface FetchRawExtractedRelationsParams {
+    id1: string,
+    id2: string,
+    pmid: string,
+    onlyNovel: boolean,
+    page: number,
+}
+
+export interface FetchRawExtractedRelationsResponse {
+    relations: Array<RawExtractedRelation>
+    page: number
+    totalPages: number
+}
+
 export class Api {
     baseUrl: string;
     axiosInstance: AxiosInstance;
@@ -23,14 +37,15 @@ export class Api {
         return this._instance;
     }
 
-    static getRawExtractedRelations(id1: string, id2: string, pmid: string,
-                                    onlyNovel: boolean): Promise<AxiosResponse<Array<RawExtractedRelation>>> {
+    static fetchRawExtractedRelations(params: FetchRawExtractedRelationsParams):
+        Promise<AxiosResponse<FetchRawExtractedRelationsResponse>> {
         return Api.Instance().axiosInstance.get('/relations', {
             params: {
-                id1: id1,
-                id2: id2,
-                pmid: pmid,
-                only_novel: onlyNovel ? 1 : 0,
+                id1: params.id1,
+                id2: params.id2,
+                pmid: params.pmid,
+                only_novel: params.onlyNovel ? 1 : 0,
+                page: params.page,
             }
         })
     }

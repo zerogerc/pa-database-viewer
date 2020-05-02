@@ -23,3 +23,7 @@ class BaseRequestHandler(RequestHandler, SessionMixin):
     def send_response(self, data, status=200):
         self.set_status(status)
         self.write(json.dumps(data))
+
+    def get_numeric_argument(self, key: str, *, default: int = 0) -> int:
+        arg = self.get_argument(key, '')
+        return int(arg) if arg.isnumeric() else default

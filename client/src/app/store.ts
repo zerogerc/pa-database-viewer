@@ -1,6 +1,6 @@
 import {createApi, createEffect, createStore, Store} from 'effector';
-import {RawExtractedRelation, RelationsFormValues} from './models';
-import {Api} from './api';
+import {RelationsFormValues} from './models';
+import {Api, FetchRawExtractedRelationsParams, FetchRawExtractedRelationsResponse} from './api';
 
 export const $relationsFormStore: Store<RelationsFormValues> = createStore<RelationsFormValues>({
     id1: '',
@@ -24,21 +24,20 @@ export const relationsFormApi = createApi($relationsFormStore, {
     }
 });
 
-export interface FetchRawExtractedRelationsParams {
-    id1: string,
-    id2: string,
-    pmid: string,
-    onlyNovel: boolean,
-}
+export const fetchRawExtractedRelations =
+    createEffect<FetchRawExtractedRelationsParams, FetchRawExtractedRelationsResponse>({
+        async handler(params) {
+            const res = await Api.fetchRawExtractedRelations(params);
+            return res.data;
+        }
+    });
 
-export const fetchRawExtractedRelations = createEffect<FetchRawExtractedRelationsParams, Array<RawExtractedRelation>>({
-    async handler(params) {
-        const res = await Api.getRawExtractedRelations(params.id1, params.id2, params.pmid, params.onlyNovel);
-        return res.data;
-    }
-});
-
-export const $rawExtractedRelationsStore: Store<Array<RawExtractedRelation>> = createStore<Array<RawExtractedRelation>>([]);
+export const $rawExtractedRelationsStore: Store<FetchRawExtractedRelationsResponse> =
+    createStore<FetchRawExtractedRelationsResponse>({
+        relations: [],
+        page: 0,
+        totalPages: 0,
+    });
 
 $rawExtractedRelationsStore
     .on(fetchRawExtractedRelations.done, (state, fetchResult) => fetchResult.result);

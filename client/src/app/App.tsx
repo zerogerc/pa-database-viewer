@@ -11,7 +11,7 @@ export function App() {
     return (
         <div className="App">
             <RelationsForm/>
-            <RelationsTable relations={rawExtractedRelations}/>
+            <RelationsTable relations={rawExtractedRelations.relations}/>
         </div>
     );
 }

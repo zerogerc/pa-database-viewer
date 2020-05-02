@@ -14,20 +14,30 @@ class RelationsHandler(BaseRequestHandler):
     def __init__(self, application: tornado.web.Application,
                  request: httputil.HTTPServerRequest, *, pa_db_path: Path, **kwargs: Any) -> None:
         super().__init__(application, request, **kwargs)
+        self.relations_per_page = 300
         self.pa_db_path = pa_db_path
         self._db = None
 
     def get(self) -> None:
-        only_novel_arg = self.get_argument('only_novel', '')
-        only_novel = int(only_novel_arg) if only_novel_arg.isnumeric() else 0
+        only_novel = self.get_numeric_argument('only_novel', default=0)
+        page = self.get_numeric_argument('page', default=0)
 
-        data = list(self.db.get_raw_relations(
+        relations = list(self.db.get_raw_relations(
             id1=self.get_argument('id1', None),
             id2=self.get_argument('id2', None),
             pmid=self.get_argument('pmid', None),
             in_ctd=0 if only_novel else None
         ))
-        self.send_response(data)
+
+        total_relations = len(relations)
+        total_pages = total_relations // self.relations_per_page + int(total_relations % self.relations_per_page != 0)
+        page = min(page, total_pages)
+
+        self.send_response({
+            'relations': relations,
+            'page': page,
+            'totalPages': total_pages,
+        })
 
     @property
     def db(self) -> PaperAnalyzerDatabase:
