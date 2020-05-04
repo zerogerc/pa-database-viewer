@@ -22,11 +22,11 @@ def main():
     SERVER_CONFIG.debug = options.debug
 
     handlers = [
-        (f'/relations', RelationsHandler, dict(pa_db_path=Path(options.pa_db_path))),
+        (f'/api/relations', RelationsHandler, dict(pa_db_path=Path(options.pa_db_path))),
     ]
     if not options.debug:
-        handlers.append(('/', MainHandler, dict(index_path=Path(options.index_path))))
         handlers.append((r'/static/(.*)', tornado.web.StaticFileHandler, {'path': Path(options.static_dir)}))
+        handlers.append((r'/(.*)', MainHandler, dict(index_path=Path(options.index_path))))
 
     app = Application(handlers)
     http_server = HTTPServer(app)

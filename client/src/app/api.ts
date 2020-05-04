@@ -39,7 +39,7 @@ export class Api {
 
     static fetchRawExtractedRelations(params: FetchRawExtractedRelationsParams):
         Promise<AxiosResponse<FetchRawExtractedRelationsResponse>> {
-        return Api.Instance().axiosInstance.get('/relations', {
+        return Api.Instance().axiosInstance.get('/api/relations', {
             params: {
                 id1: params.id1,
                 id2: params.id2,

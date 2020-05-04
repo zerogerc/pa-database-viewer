@@ -5,8 +5,20 @@ import {$rawExtractedRelationsStore, $relationsFormStore, fetchRawExtractedRelat
 import {RelationsForm} from './RelationsForm';
 import {RelationsTable} from './RelationsTable';
 import {RelationsPagination} from './RelationsPagination';
+import {Route, Switch} from 'react-router';
 
 export function App() {
+    return (
+        <div className="App">
+            <Switch>
+                <Route exact path="/" component={RelationsPage}/>
+                <Route exact path="/papers" component={RelationPapersPage}/>
+            </Switch>
+        </div>
+    );
+}
+
+export function RelationsPage() {
     const rawExtractedRelations = useStore($rawExtractedRelationsStore);
 
     let paginationBlock = <></>;
@@ -20,10 +32,16 @@ export function App() {
     }
 
     return (
-        <div className="App">
+        <div>
             <RelationsForm/>
             <RelationsTable relations={rawExtractedRelations.relations}/>
             {paginationBlock}
         </div>
+    );
+}
+
+export function RelationPapersPage() {
+    return (
+        <h1>This is a page for papers of single relation</h1>
     );
 }
