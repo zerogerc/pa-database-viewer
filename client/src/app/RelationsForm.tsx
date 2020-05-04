@@ -53,7 +53,7 @@ export function RelationsForm() {
             className="btn btn-primary"
             onClick={() => {
                 fetchRawExtractedRelations($relationsFormStore.getState());
-                relationsFormApi.setPage(1);
+                relationsFormApi.setDefaultPage();
             }}>
             Make request
         </button>

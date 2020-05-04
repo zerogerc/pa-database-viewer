@@ -1,12 +1,7 @@
 import * as React from 'react';
-import {useEffect} from 'react';
 import {relationsFormApi} from './store';
 
 export function RelationsPagination(props: { page: number, totalPages: number, onPageSelected: () => void }): React.ReactElement {
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, [props.page]);
 
     const selectPage = (page: number) => {
         if (page == props.page) {
@@ -18,37 +13,40 @@ export function RelationsPagination(props: { page: number, totalPages: number, o
 
     let pages = [];
     let ellipsisPages = 5;
-    let startPage = Math.max(1, props.page - ellipsisPages);
-    let endPage = Math.min(props.totalPages, props.page + ellipsisPages);
-    let ellipsisStart = startPage > 1;
-    let ellipsisEnd = endPage < props.totalPages;
+    let startPage = Math.max(0, props.page - ellipsisPages);
+    let endPage = Math.min(props.totalPages - 1, props.page + ellipsisPages);
+    let ellipsisStart = startPage > 0;
+    let ellipsisEnd = endPage < props.totalPages - 1;
 
     if (ellipsisStart) {
-        pages.push(<li key={1} className={`page-item`}>
-            <span className="page-link" onClick={(e: any) => selectPage(1)}>1</span>
-        </li>);
-        pages.push(<li key={2} className={`page-item`}><span className="page-link">…</span></li>);
+        pages.push(<PageLink key="0" text="1" onClick={() => selectPage(0)}/>);
+        pages.push(<PageLink key="ellipsis-start" text="…"/>);
         startPage++;
     }
 
     for (let number = startPage; number <= endPage; number++) {
         const activeClassName = number == props.page ? " active" : "";
         const _number = number;
-        pages.push(<li key={number} className={`page-item ${activeClassName}`}>
-            <span className="page-link" onClick={() => selectPage(_number)}>{number}</span>
-        </li>);
+        pages.push(<PageLink key={`${number}`} text={`${number + 1}`} className={activeClassName}
+                             onClick={() => selectPage(_number)}/>);
     }
 
     if (ellipsisEnd) {
         pages.pop();
-        pages.push(<li key={props.totalPages - 1} className={`page-item`}><span
-            className="page-link">…</span></li>);
-        pages.push(<li key={props.totalPages} className={`page-item`}>
-            <span className="page-link" onClick={(e: any) => selectPage(props.totalPages)}>{props.totalPages}</span>
-        </li>);
+        pages.push(<PageLink key="ellipsis-end" text="…"/>);
+        pages.push(<PageLink key={`${props.totalPages - 1}`} text={`${props.totalPages}`}
+                             onClick={() => selectPage(props.totalPages - 1)}/>);
     }
 
-    return <ul className="pagination">
-        {pages}
-    </ul>;
+    return (
+        <ul className="pagination">
+            {pages}
+        </ul>);
+}
+
+export function PageLink(props: { key: string, text: string, className?: string, onClick?: () => void }) {
+    const pageClassName = "page-item" + (props.className != null ? props.className : "");
+    return (<li key={props.key} className={pageClassName}>
+        <span className="page-link" onClick={props.onClick}>{props.text}</span>
+    </li>);
 }

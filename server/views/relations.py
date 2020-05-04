@@ -20,7 +20,7 @@ class RelationsHandler(BaseRequestHandler):
 
     def get(self) -> None:
         only_novel = self.get_numeric_argument('only_novel', default=0)
-        page = self.get_numeric_argument('page', default=1)
+        page = self.get_numeric_argument('page', default=0)
 
         relations = list(self.db.get_raw_relations(
             id1=self.get_argument('id1', None),
@@ -34,7 +34,7 @@ class RelationsHandler(BaseRequestHandler):
         page = min(page, total_pages)
 
         self.send_response({
-            'relations': relations[self.relations_per_page * (page - 1): self.relations_per_page * page],
+            'relations': relations[self.relations_per_page * page: self.relations_per_page * (page + 1)],
             'page': page,
             'totalPages': total_pages,
         })

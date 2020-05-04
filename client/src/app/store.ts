@@ -7,7 +7,7 @@ export const $relationsFormStore: Store<RelationsFormValues> = createStore<Relat
     id2: 'MESH:C000657245', // COVID-19 infection
     pmid: '',
     onlyNovel: false,
-    page: 1,
+    page: 0,
 });
 
 export const relationsFormApi = createApi($relationsFormStore, {
@@ -25,7 +25,10 @@ export const relationsFormApi = createApi($relationsFormStore, {
     },
     setPage: (form, page: number) => {
         return {...form, page};
-    }
+    },
+    setDefaultPage: (form) => {
+        return {...form, page: 0}
+    },
 });
 
 export const $relationPapersPageStore: Store<RelationPapersPageStore> = createStore<RelationPapersPageStore>({
@@ -55,7 +58,7 @@ export const fetchRawExtractedRelations =
 export const $rawExtractedRelationsStore: Store<FetchRawExtractedRelationsResponse> =
     createStore<FetchRawExtractedRelationsResponse>({
         relations: [],
-        page: 1,
+        page: 0,
         totalPages: 0,
     });
 
