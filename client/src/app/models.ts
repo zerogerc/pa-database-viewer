@@ -17,3 +17,7 @@ export interface RelationsFormValues {
     onlyNovel: boolean,
     page: number,
 }
+
+export interface RelationPapersPageStore {
+    pmids: string[],
+}

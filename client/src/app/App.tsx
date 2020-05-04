@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import './App.css';
 import {useStore} from 'effector-react';
 import {$rawExtractedRelationsStore, $relationsFormStore, fetchRawExtractedRelations} from './store';
@@ -6,6 +6,7 @@ import {RelationsForm} from './RelationsForm';
 import {RelationsTable} from './RelationsTable';
 import {RelationsPagination} from './RelationsPagination';
 import {Route, Switch} from 'react-router';
+import {RelationPapersPage} from './page-relation-papers/RelationPapersPage';
 
 export function App() {
     return (
@@ -37,11 +38,5 @@ export function RelationsPage() {
             <RelationsTable relations={rawExtractedRelations.relations}/>
             {paginationBlock}
         </div>
-    );
-}
-
-export function RelationPapersPage() {
-    return (
-        <h1>This is a page for papers of single relation</h1>
     );
 }

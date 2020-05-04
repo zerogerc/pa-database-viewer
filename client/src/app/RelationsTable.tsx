@@ -2,7 +2,7 @@ import React from 'react';
 import './RelationsTable.css'
 import {RawExtractedRelation} from './models';
 import {Entity} from './Entity';
-import {PubmedPaperView} from './PubmedPaperView';
+import {PubmedPaperView} from './views/PubmedPaperView';
 
 export function RelationsTable(props: { relations: Array<RawExtractedRelation> }) {
     return <div>
