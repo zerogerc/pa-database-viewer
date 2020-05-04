@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Iterator, Optional
+from typing import Any, Iterator, Optional, Tuple, Dict
 
 from sqlalchemy import create_engine, MetaData, Table, Column, Float, String, select, func, desc, Integer
 
@@ -39,7 +39,13 @@ class PaperAnalyzerDatabase:
                 query = query.where(RELATIONS_TABLE.columns.in_ctd == in_ctd)
 
             query = query.order_by(desc(RELATIONS_TABLE.columns.prob)).limit(100)
-            yield from (dict(row) for row in connection.execute(query))
+            yield from (self.relation_row_to_dict(row) for row in connection.execute(query))
+
+    def relation_row_to_dict(self, row: Tuple) -> Dict[str, Any]:
+        result = dict(row)
+        result['pmids'] = [result['pmid']]
+        result.pop('pmid')
+        return result
 
 
 def main():

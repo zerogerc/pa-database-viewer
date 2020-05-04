@@ -2,7 +2,7 @@ import React from 'react';
 import './RelationsTable.css'
 import {RawExtractedRelation} from './models';
 import {Entity} from './Entity';
-import {PubmedPaperView} from './views/PubmedPaperView';
+import {RelationPapersButton} from './views/RelationPapersButton';
 
 export function RelationsTable(props: { relations: Array<RawExtractedRelation> }) {
     return <div>
@@ -21,7 +21,7 @@ export function RelationsTable(props: { relations: Array<RawExtractedRelation> }
                         <Entity name={item.name1} id={item.id1} group={item.group1}/>,
                         <Entity name={item.name2} id={item.id2} group={item.group2}/>,
                         <span>{item.label}</span>,
-                        <PubmedPaperView pmid={item.pmid}/>,
+                        <RelationPapersButton pmids={item.pmids}/>,
                         <span>{item.prob.toFixed(4)}</span>
                     )}
                 </li>

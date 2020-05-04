@@ -6,7 +6,7 @@ export interface RawExtractedRelation {
     id2: string,
     group2: string,
     label: string,
-    pmid: string,
+    pmids: string[],
     prob: number,
 }
 
