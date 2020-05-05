@@ -1,12 +1,13 @@
 import * as React from 'react';
 import './App.css';
 import {useStore} from 'effector-react';
-import {$rawExtractedRelationsStore, $relationsFormStore, fetchRawExtractedRelations} from './store';
+import {$rawExtractedRelationsStore} from './store';
 import {RelationsForm} from './RelationsForm';
 import {RelationsTable} from './RelationsTable';
 import {RelationsPagination} from './RelationsPagination';
 import {Route, Switch} from 'react-router';
 import {RelationPapersPage} from './page-relation-papers/RelationPapersPage';
+import {fetchRelationsUsingFormValues} from './utils';
 
 export function App() {
     return (
@@ -27,9 +28,7 @@ export function RelationsPage() {
         paginationBlock = <RelationsPagination
             page={rawExtractedRelations.page}
             totalPages={rawExtractedRelations.totalPages}
-            onPageSelected={() =>
-                fetchRawExtractedRelations($relationsFormStore.getState())
-            }/>;
+            onPageSelected={() => fetchRelationsUsingFormValues()}/>;
     }
 
     return (

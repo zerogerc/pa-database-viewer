@@ -1,7 +1,8 @@
 import React from 'react';
 import './RelationsForm.css'
-import {$relationsFormStore, fetchRawExtractedRelations, relationsFormApi} from './store';
+import {$relationsFormStore, relationsFormApi} from './store';
 import {useStore} from 'effector-react';
+import {fetchRelationsUsingFormValues} from './utils';
 
 export function RelationsForm() {
     const relationsFormValues = useStore($relationsFormStore);
@@ -52,7 +53,7 @@ export function RelationsForm() {
         <button
             className="btn btn-primary"
             onClick={() => {
-                fetchRawExtractedRelations($relationsFormStore.getState());
+                fetchRelationsUsingFormValues();
                 relationsFormApi.setDefaultPage();
             }}>
             Make request

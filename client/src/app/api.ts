@@ -1,12 +1,13 @@
-import axios, {AxiosInstance, AxiosResponse} from 'axios';
-import {RawExtractedRelation} from './models';
+import axios, {AxiosInstance} from 'axios';
+import {PmidWithProb, RawExtractedRelation} from './models';
+import {createEffect} from 'effector';
 
 export interface FetchRawExtractedRelationsParams {
-    id1: string,
-    id2: string,
-    pmid: string,
-    onlyNovel: boolean,
-    page: number,
+    id1: string
+    id2: string
+    pmid: string
+    onlyNovel: number
+    page: number
 }
 
 export interface FetchRawExtractedRelationsResponse {
@@ -15,11 +16,38 @@ export interface FetchRawExtractedRelationsResponse {
     totalPages: number
 }
 
-export class Api {
+export const fetchRawExtractedRelations =
+    createEffect<FetchRawExtractedRelationsParams, FetchRawExtractedRelationsResponse>({
+        async handler(params: FetchRawExtractedRelationsParams) {
+            const res = await Endpoint.Instance().axiosInstance.get('/api/relations', {params: params});
+            return res.data;
+        }
+    });
+
+export interface FetchRelationPmidProbsParams {
+    id1: string
+    id2: string
+    label: string
+    pmids: string[]
+}
+
+export interface FetchRelationPmidProbsResponse {
+    pmidProbs: PmidWithProb[]
+}
+
+export const fetchRelationPmidProbs =
+    createEffect<FetchRelationPmidProbsParams, FetchRelationPmidProbsResponse>({
+        async handler(params: FetchRelationPmidProbsParams) {
+            const res = await Endpoint.Instance().axiosInstance.post('/api/relation-pmids', params);
+            return res.data;
+        }
+    });
+
+export class Endpoint {
     baseUrl: string;
     axiosInstance: AxiosInstance;
 
-    private static _instance: Api;
+    private static _instance: Endpoint;
 
     constructor() {
         if (process.env.NODE_ENV !== "production") {
@@ -35,19 +63,6 @@ export class Api {
             this._instance = new this();
         }
         return this._instance;
-    }
-
-    static fetchRawExtractedRelations(params: FetchRawExtractedRelationsParams):
-        Promise<AxiosResponse<FetchRawExtractedRelationsResponse>> {
-        return Api.Instance().axiosInstance.get('/api/relations', {
-            params: {
-                id1: params.id1,
-                id2: params.id2,
-                pmid: params.pmid,
-                only_novel: params.onlyNovel ? 1 : 0,
-                page: params.page,
-            }
-        })
     }
 }
 

@@ -21,7 +21,9 @@ export function RelationsTable(props: { relations: Array<RawExtractedRelation> }
                         <Entity name={item.name1} id={item.id1} group={item.group1}/>,
                         <Entity name={item.name2} id={item.id2} group={item.group2}/>,
                         <span>{item.label}</span>,
-                        <RelationPapersButton pmids={item.pmids}/>,
+                        <RelationPapersButton
+                            id1={item.id1} id2={item.id2} label={item.label} pmids={item.pmids}
+                        />,
                         <span>{item.prob.toFixed(4)}</span>
                     )}
                 </li>

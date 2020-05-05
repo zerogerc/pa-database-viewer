@@ -10,6 +10,11 @@ export interface RawExtractedRelation {
     prob: number,
 }
 
+export interface PmidWithProb {
+    pmid: string,
+    prob: number
+}
+
 export interface RelationsFormValues {
     id1: string,
     id2: string,
@@ -19,5 +24,5 @@ export interface RelationsFormValues {
 }
 
 export interface RelationPapersPageStore {
-    pmids: string[],
+    pmidProbs: PmidWithProb[],
 }

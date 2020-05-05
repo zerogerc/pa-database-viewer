@@ -1,6 +1,12 @@
-import {createApi, createEffect, createStore, Store} from 'effector';
-import {RelationPapersPageStore, RelationsFormValues} from './models';
-import {Api, FetchRawExtractedRelationsResponse} from './api';
+import {createApi, createStore, Store} from 'effector';
+import {RelationsFormValues} from './models';
+import {
+    fetchRawExtractedRelations,
+    FetchRawExtractedRelationsResponse,
+    fetchRelationPmidProbs,
+    FetchRelationPmidProbsResponse
+} from './api';
+import {createEvent} from 'effector/effector.cjs';
 
 export const $relationsFormStore: Store<RelationsFormValues> = createStore<RelationsFormValues>({
     id1: '',
@@ -31,30 +37,6 @@ export const relationsFormApi = createApi($relationsFormStore, {
     },
 });
 
-export const $relationPapersPageStore: Store<RelationPapersPageStore> = createStore<RelationPapersPageStore>({
-    pmids: ['12628520']
-});
-
-export const relationPapersPageStoreApi = createApi($relationPapersPageStore, {
-    setPmids: (store, pmids: string[]) => {
-        return {...store, pmids}
-    }
-});
-
-export const fetchRawExtractedRelations =
-    createEffect<RelationsFormValues, FetchRawExtractedRelationsResponse>({
-        async handler(values: RelationsFormValues) {
-            const res = await Api.fetchRawExtractedRelations({
-                id1: values.id1,
-                id2: values.id2,
-                pmid: values.pmid,
-                onlyNovel: values.onlyNovel,
-                page: values.page,
-            });
-            return res.data;
-        }
-    });
-
 export const $rawExtractedRelationsStore: Store<FetchRawExtractedRelationsResponse> =
     createStore<FetchRawExtractedRelationsResponse>({
         relations: [],
@@ -64,3 +46,16 @@ export const $rawExtractedRelationsStore: Store<FetchRawExtractedRelationsRespon
 
 $rawExtractedRelationsStore
     .on(fetchRawExtractedRelations.done, (state, fetchResult) => fetchResult.result);
+
+export const $relationPmidProbsStore: Store<FetchRelationPmidProbsResponse> =
+    createStore<FetchRelationPmidProbsResponse>({
+        pmidProbs: [],
+    });
+
+export const clearRelationPmidProbsStore = createEvent<void>('clear relation pmid probs');
+
+$relationPmidProbsStore
+    .on(fetchRelationPmidProbs.done, (state, fetchResult) => fetchResult.result)
+    .on(clearRelationPmidProbsStore, () => {
+        return {pmidProbs: []};
+    });

@@ -16,6 +16,11 @@ code {
     background-color: whitesmoke;
 }
 
+.no-bullets-list {
+    list-style: none;
+    padding-left: 0;
+}
+
 .chemical {
     background-color: lightgreen;
     border-radius: 0.2rem;

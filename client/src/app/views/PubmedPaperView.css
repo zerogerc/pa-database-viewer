@@ -1,5 +1,15 @@
 .PubmedPaperView {
     display: grid;
+    grid-template-areas: 'pmid links';
+    grid-column-gap: 1rem;
+}
+
+.PubmedPaperView-Pmid {
+    grid-area: pmid;
+}
+
+.PubmedPaperView-Links {
+    grid-area: links;
 }
 
 .PubmedPaperView-Button {
