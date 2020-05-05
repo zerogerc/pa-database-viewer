@@ -1,8 +1,8 @@
 import React from 'react';
 import './RelationsTable.css'
 import {RawExtractedRelation} from './models';
-import {Entity} from './Entity';
 import {RelationPapersButton} from './views/RelationPapersButton';
+import {EntityView} from './EntityViewV';
 
 export function RelationsTable(props: { relations: Array<RawExtractedRelation> }) {
     return <div>
@@ -15,19 +15,19 @@ export function RelationsTable(props: { relations: Array<RawExtractedRelation> }
             "RelationsTable-Row-Header"
         )}
         <ul className="RelationsTable-List colored-list">
-            {props.relations.map((item: RawExtractedRelation) =>
-                <li>
+            {props.relations.map((item: RawExtractedRelation) => {
+                return <li>
                     {createRelationsRow(
-                        <Entity name={item.name1} id={item.id1} group={item.group1}/>,
-                        <Entity name={item.name2} id={item.id2} group={item.group2}/>,
+                        <EntityView entity={item.head}/>,
+                        <EntityView entity={item.tail}/>,
                         <span>{item.label}</span>,
                         <RelationPapersButton
-                            id1={item.id1} id2={item.id2} label={item.label} pmids={item.pmids}
+                            head={item.head} tail={item.tail} label={item.label} pmids={item.pmids}
                         />,
                         <span>{item.prob.toFixed(4)}</span>
                     )}
                 </li>
-            )}
+            })}
         </ul>
     </div>;
 }

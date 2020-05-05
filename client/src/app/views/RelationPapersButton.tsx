@@ -1,15 +1,22 @@
 import * as React from 'react';
 import {Link} from 'react-router-dom';
 import {fetchRelationPmidProbs} from '../api';
+import {relationPapersPageStoreApi} from '../store';
+import {Entity} from '../models';
 
-export function RelationPapersButton(props: { id1: string, id2: string, label: string, pmids: string[] }) {
+export function RelationPapersButton(props: { head: Entity, tail: Entity, label: string, pmids: string[] }) {
     return <div>
         <Link className="btn btn-outline-info"
               to={`/papers`}
               onClick={() => {
+                  relationPapersPageStoreApi.setStore({
+                      head: props.head,
+                      tail: props.tail,
+                      label: props.label
+                  });
                   fetchRelationPmidProbs({
-                      id1: props.id1,
-                      id2: props.id2,
+                      id1: props.head.id,
+                      id2: props.tail.id,
                       label: props.label,
                       pmids: props.pmids
                   })

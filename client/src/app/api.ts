@@ -20,7 +20,17 @@ export const fetchRawExtractedRelations =
     createEffect<FetchRawExtractedRelationsParams, FetchRawExtractedRelationsResponse>({
         async handler(params: FetchRawExtractedRelationsParams) {
             const res = await Endpoint.Instance().axiosInstance.get('/api/relations', {params: params});
-            return res.data;
+            const rawData = res.data;
+            return {
+                relations: rawData['relations'].map((raw: any) => {
+                    return {
+                        head: {name: raw['name1'], id: raw['id1'], group: raw['group1']},
+                        tail: {name: raw['name2'], id: raw['id2'], group: raw['group2']},
+                        label: raw['label'], prob: raw['prob'], pmids: raw['pmids'],
+                    }
+                }),
+                page: rawData['page'], totalPages: rawData['totalPages']
+            }
         }
     });
 

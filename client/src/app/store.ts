@@ -1,5 +1,5 @@
 import {createApi, createStore, Store} from 'effector';
-import {RelationsFormValues} from './models';
+import {RelationPapersPageStore, RelationsFormValues} from './models';
 import {
     fetchRawExtractedRelations,
     FetchRawExtractedRelationsResponse,
@@ -59,3 +59,11 @@ $relationPmidProbsStore
     .on(clearRelationPmidProbsStore, () => {
         return {pmidProbs: []};
     });
+
+export const $relationPapersPageStore: Store<RelationPapersPageStore> = createStore<RelationPapersPageStore>({});
+
+export const relationPapersPageStoreApi = createApi($relationPapersPageStore, {
+    setStore: (store, values: RelationPapersPageStore) => {
+        return values;
+    }
+});

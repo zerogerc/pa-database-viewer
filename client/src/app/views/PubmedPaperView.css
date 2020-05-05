@@ -1,7 +1,30 @@
 .PubmedPaperView {
     display: grid;
-    grid-template-areas: 'pmid links';
+    grid-template-columns: max-content max-content;
+    grid-template-areas: 'prob pmid' 'prob links';
     grid-column-gap: 1rem;
+}
+
+.PubmedPaperView-Prob {
+    grid-area: prob;
+    display: grid;
+    padding: 1rem;
+    align-items: center;
+    justify-items: center;
+    width: 4rem;
+    height: 4rem;
+}
+
+.score-low {
+    background-color: lightpink;
+}
+
+.score-medium {
+    background-color: lightyellow;
+}
+
+.score-high {
+    background-color: lightgreen;
 }
 
 .PubmedPaperView-Pmid {
