@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 import tornado
@@ -7,7 +8,9 @@ from tornado.options import define, options
 from tornado.web import Application
 
 from server.config import SERVER_CONFIG
+from server.database import PaperAnalyzerDatabase
 from server.views.main import MainHandler
+from server.views.relation_pmids import RelationPmidsHandler
 from server.views.relations import RelationsHandler
 
 define('port', type=int, default=8888, help='port to listen on')
@@ -16,13 +19,19 @@ define('pa_db_path', type=str, default='', help='path to paper-analyzer database
 define('index_path', type=str, default='', help='path to index.html')
 define('static_dir', type=str, default='', help='path to static files')
 
+G_LOG = logging.getLogger(__name__)
+
 
 def main():
+    logging.basicConfig(level=logging.INFO)
     tornado.options.parse_command_line()
     SERVER_CONFIG.debug = options.debug
 
+    db = PaperAnalyzerDatabase(Path(options.pa_db_path))
+
     handlers = [
-        (f'/api/relations', RelationsHandler, dict(pa_db_path=Path(options.pa_db_path))),
+        (f'/api/relations', RelationsHandler, dict(db=db)),
+        (f'/api/relation-pmids', RelationPmidsHandler, dict(db=db)),
     ]
     if not options.debug:
         handlers.append((r'/static/(.*)', tornado.web.StaticFileHandler, {'path': Path(options.static_dir)}))
@@ -31,7 +40,7 @@ def main():
     app = Application(handlers)
     http_server = HTTPServer(app)
     http_server.listen(options.port)
-    print('Listening on http://localhost:%i' % options.port)
+    G_LOG.info('Listening on http://localhost:%i' % options.port)
     IOLoop.current().start()
 
 

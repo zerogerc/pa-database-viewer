@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Iterator, Optional, Tuple, Dict
+from typing import Any, Iterator, Optional, Tuple, Dict, List
 
 from sqlalchemy import create_engine, MetaData, Table, Column, Float, String, select, func, Integer, desc
 
@@ -36,7 +36,7 @@ class PaperAnalyzerDatabase:
     def __init__(self, db_path: Path):
         self.db_engine = create_engine('sqlite:///{}'.format(db_path))
 
-    def get_raw_relations(self, id1: str, id2: str, pmid: str, in_ctd: Optional[int] = None) -> Iterator[Any]:
+    def get_merged_relations(self, id1: str, id2: str, pmid: str, in_ctd: Optional[int] = None) -> Iterator[Any]:
         with self.db_engine.connect() as connection:
             query = select([
                 NAME_1, ID_1, GROUP_1, NAME_2, ID_2, GROUP_2, LABEL,
@@ -55,12 +55,22 @@ class PaperAnalyzerDatabase:
 
             query = query.group_by(ID_1, GROUP_1, ID_2, GROUP_2, LABEL)
             query = query.order_by(desc('prob')).limit(100)
-            yield from (self.relation_row_to_dict(row) for row in connection.execute(query))
+            yield from (self._relation_row_to_dict(row) for row in connection.execute(query))
 
-    def relation_row_to_dict(self, row: Tuple) -> Dict[str, Any]:
+    def _relation_row_to_dict(self, row: Tuple) -> Dict[str, Any]:
         result = dict(row)
         result['pmids'] = result['pmids'].split(',')
         return result
+
+    def get_relation_pmid_probs(self, id1: str, id2: str, label: str, pmids: List[str]) -> Iterator[Any]:
+        with self.db_engine.connect() as connection:
+            query = select([PMID, PROB]) \
+                .where(ID_1 == id1) \
+                .where(ID_2 == id2) \
+                .where(label == label) \
+                .where(PMID.in_(pmids))
+
+            yield from (dict(row) for row in connection.execute(query))
 
 
 def main():

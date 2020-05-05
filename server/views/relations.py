@@ -1,4 +1,3 @@
-from pathlib import Path
 from typing import Any
 
 import tornado
@@ -12,17 +11,16 @@ from server.views.base import BaseRequestHandler
 class RelationsHandler(BaseRequestHandler):
 
     def __init__(self, application: tornado.web.Application,
-                 request: httputil.HTTPServerRequest, *, pa_db_path: Path, **kwargs: Any) -> None:
+                 request: httputil.HTTPServerRequest, *, db: PaperAnalyzerDatabase, **kwargs: Any) -> None:
         super().__init__(application, request, **kwargs)
         self.relations_per_page = 10
-        self.pa_db_path = pa_db_path
-        self._db = None
+        self.db = db
 
     def get(self) -> None:
         only_novel = self.get_numeric_argument('only_novel', default=0)
         page = self.get_numeric_argument('page', default=0)
 
-        relations = list(self.db.get_raw_relations(
+        relations = list(self.db.get_merged_relations(
             id1=self.get_argument('id1', None),
             id2=self.get_argument('id2', None),
             pmid=self.get_argument('pmid', None),
@@ -38,10 +36,3 @@ class RelationsHandler(BaseRequestHandler):
             'page': page,
             'totalPages': total_pages,
         })
-
-    @property
-    def db(self) -> PaperAnalyzerDatabase:
-        if self._db is not None:
-            return self._db
-        self._db = PaperAnalyzerDatabase(self.pa_db_path)
-        return self._db
