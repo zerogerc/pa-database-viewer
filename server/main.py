@@ -35,7 +35,7 @@ def main():
     ]
     if not options.debug:
         handlers.append((r'/static/(.*)', tornado.web.StaticFileHandler, {'path': Path(options.static_dir)}))
-        handlers.append((r'/(.*)', MainHandler, dict(index_path=Path(options.index_path))))
+        handlers.append((r'/', MainHandler, dict(index_path=Path(options.index_path))))
 
     app = Application(handlers)
     http_server = HTTPServer(app)
