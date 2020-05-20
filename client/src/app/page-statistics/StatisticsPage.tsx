@@ -1,41 +1,26 @@
 import * as React from 'react';
+import {useEffect} from 'react';
 import './StatisticsPage.css';
 import {Chart} from 'chart.js';
 import {RelationTypeCountsChart} from './RelationTypeCountsChart';
+import {$statsStore} from '../store';
+import {fetchStats} from '../api';
+import {useStore} from 'effector-react';
 
 export function StatisticsPage() {
+    const statsStore = useStore($statsStore);
+    useEffect(() => {
+        if (statsStore.rTypeCounts.length == 0) {
+            fetchStats({});
+        }
+    });
 
     return (
         <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr'}}>
-            <div>
-                <RelationTypeCountsChart rType='CHEMICAL-GENE:increases^expression' counts={
-                    [20, 10, 5, 3, 34, 4, 23, 23, 50, 23]
-                }/>
-            </div>
-            <div>
-                <RelationTypeCountsChart rType='CHEMICAL-GENE:decreases^expression' counts={
-                    [20, 10, 5, 3, 34, 4, 23, 23, 50, 23]
-                }/>
-            </div>
-            <div>
-                <RelationTypeCountsChart rType='CHEMICAL-GENE:increases^activity' counts={
-                    [20, 10, 5, 3, 34, 4, 23, 23, 50, 23]
-                }/>
-            </div>
-            <div>
-                <RelationTypeCountsChart rType='CHEMICAL-GENE:decreases^activity' counts={
-                    [20, 10, 5, 3, 34, 4, 23, 23, 50, 23]
-                }/>
-            </div>
-            <div>
-                <RelationTypeCountsChart rType='GENE-DISEASE:therapeutic' counts={
-                    [20, 10, 5, 3, 34, 4, 23, 23, 50, 23]
-                }/>
-            </div>
-            <div>
-                <RelationTypeCountsChart rType='GENE-DISEASE:marker/mechanism' counts={
-                    [20, 10, 5, 3, 34, 4, 23, 23, 50, 23]
-                }/>
-            </div>
+            {statsStore.rTypeCounts.map((rTypeCounts) =>
+                <div>
+                    <RelationTypeCountsChart rType={rTypeCounts.rType} counts={rTypeCounts.counts}/>
+                </div>
+            )}
         </div>);
 }

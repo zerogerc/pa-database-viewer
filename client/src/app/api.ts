@@ -1,5 +1,5 @@
 import axios, {AxiosInstance} from 'axios';
-import {PmidWithProb, RawExtractedRelation} from './models';
+import {PmidWithProb, RawExtractedRelation, RTypeCounts} from './models';
 import {createEffect} from 'effector';
 
 export interface FetchRawExtractedRelationsParams {
@@ -49,6 +49,22 @@ export const fetchRelationPmidProbs =
     createEffect<FetchRelationPmidProbsParams, FetchRelationPmidProbsResponse>({
         async handler(params: FetchRelationPmidProbsParams) {
             const res = await Endpoint.Instance().axiosInstance.post('/api/relation-pmids', params);
+            return res.data;
+        }
+    });
+
+export interface FetchStatsParams {
+
+}
+
+export interface FetchStatsResponse {
+    rTypeCounts: RTypeCounts[]
+}
+
+export const fetchStats =
+    createEffect<FetchStatsParams, FetchStatsResponse>({
+        async handler(params: FetchStatsParams) {
+            const res = await Endpoint.Instance().axiosInstance.get('/api/stats', {params: params});
             return res.data;
         }
     });

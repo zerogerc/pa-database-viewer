@@ -4,7 +4,9 @@ import {
     fetchRawExtractedRelations,
     FetchRawExtractedRelationsResponse,
     fetchRelationPmidProbs,
-    FetchRelationPmidProbsResponse
+    FetchRelationPmidProbsResponse,
+    fetchStats,
+    FetchStatsResponse,
 } from './api';
 import {createEvent} from 'effector/effector.cjs';
 
@@ -59,6 +61,14 @@ $relationPmidProbsStore
     .on(clearRelationPmidProbsStore, () => {
         return {pmidProbs: []};
     });
+
+export const $statsStore: Store<FetchStatsResponse> =
+    createStore<FetchStatsResponse>({
+        rTypeCounts: []
+    });
+
+$statsStore
+    .on(fetchStats.done, (state, fetchResult) => fetchResult.result);
 
 export const $relationPapersPageStore: Store<RelationPapersPageStore> = createStore<RelationPapersPageStore>({});
 

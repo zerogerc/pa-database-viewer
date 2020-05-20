@@ -30,3 +30,8 @@ export interface RelationPapersPageStore {
     tail?: Entity
     label?: string
 }
+
+export interface RTypeCounts {
+    rType: string
+    counts: number[]
+}
