@@ -8,6 +8,7 @@ import {RelationsPagination} from './RelationsPagination';
 import {Route, Switch} from 'react-router';
 import {RelationPapersPage} from './page-relation-papers/RelationPapersPage';
 import {fetchRelationsUsingFormValues} from './utils';
+import {StatisticsPage} from './page-statistics/StatisticsPage';
 
 export function App() {
     return (
@@ -15,6 +16,7 @@ export function App() {
             <Switch>
                 <Route exact path="/" component={RelationsPage}/>
                 <Route exact path="/papers" component={RelationPapersPage}/>
+                <Route exact path="/stats" component={StatisticsPage}/>
             </Switch>
         </div>
     );

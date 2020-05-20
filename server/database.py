@@ -36,6 +36,11 @@ class PaperAnalyzerDatabase:
     def __init__(self, db_path: Path):
         self.db_engine = create_engine('sqlite:///{}'.format(db_path))
 
+    def get_relation_type_probabilities(self, r_type: str) -> List[float]:
+        with self.db_engine.connect() as connection:
+            query = select([PROB]).where(LABEL == r_type)
+            yield from (row['prob'] for row in connection.execute(query))
+
     def get_merged_relations(self, id1: str, id2: str, pmid: str, in_ctd: Optional[int] = None) -> Iterator[Any]:
         with self.db_engine.connect() as connection:
             query = select([
