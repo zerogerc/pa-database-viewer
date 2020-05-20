@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, List, Dict
 
 import tornado
 from tornado import httputil
@@ -17,22 +17,21 @@ class StatsHandler(BaseRequestHandler):
         self.db = db
 
     def get(self) -> None:
-        only_novel = self.get_argument('relation_type', default='')
-        # probability_buckets =
-
-        relations = list(self.db.get_merged_relations(
-            id1=self.get_argument('id1', None),
-            id2=self.get_argument('id2', None),
-            pmid=self.get_argument('pmid', None),
-            in_ctd=0 if only_novel else None
-        ))
-
-        total_relations = len(relations)
-        total_pages = total_relations // self.relations_per_page + int(total_relations % self.relations_per_page != 0)
-        page = min(page, total_pages)
+        relation_type_counts = self.relation_type_counts()
 
         self.send_response({
-            'relations': relations[self.relations_per_page * page: self.relations_per_page * (page + 1)],
-            'page': page,
-            'totalPages': total_pages,
+            'relation_type_counts': list(relation_type_counts.items()),
         })
+
+    def relation_type_counts(self) -> Dict[str, List[int]]:
+        relation_types: List[str] = list(self.db.get_relation_types())
+        result: Dict[str, List[int]] = {r: [] for r in relation_types}
+
+        num_buckets = 10
+        probs = [i / num_buckets for i in range(num_buckets + 1)]
+        for min_prob, max_prob in zip(probs, probs[1:]):
+            for r in result.keys():
+                result[r].append(0)
+            for r_type, count in self.db.get_relation_type_counts(min_prob=min_prob, max_prob=max_prob):
+                result[r_type][-1] = count
+        return result

@@ -12,6 +12,7 @@ from server.database import PaperAnalyzerDatabase
 from server.views.main import MainHandler
 from server.views.relation_pmids import RelationPmidsHandler
 from server.views.relations import RelationsHandler
+from server.views.stats import StatsHandler
 
 define('port', type=int, default=8888, help='port to listen on')
 define('debug', type=bool, default=False, help='run in debug mode')
@@ -32,6 +33,7 @@ def main():
     handlers = [
         (f'/api/relations', RelationsHandler, dict(db=db)),
         (f'/api/relation-pmids', RelationPmidsHandler, dict(db=db)),
+        (f'/api/stats', StatsHandler, dict(db=db)),
     ]
     if not options.debug:
         handlers.append((r'/static/(.*)', tornado.web.StaticFileHandler, {'path': Path(options.static_dir)}))
