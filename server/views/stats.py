@@ -6,7 +6,7 @@ from tornado import httputil
 from tornado.web import RequestHandler
 
 from server.collection import CollectionData
-from server.db.relations import PaperAnalyzerDatabase
+from server.data.relations import PaperAnalyzerDatabase
 from server.views.base import BaseRequestHandler
 
 G_LOG = logging.getLogger(__name__)

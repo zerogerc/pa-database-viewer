@@ -13,6 +13,7 @@ from server.views.main import MainHandler
 from server.views.relation_pmids import RelationPmidsHandler
 from server.views.relations import RelationsHandler
 from server.views.stats import StatsHandler
+from server.views.suggest import SuggestHandler
 
 define('port', type=int, default=8888, help='port to listen on')
 define('debug', type=bool, default=False, help='run in debug mode')
@@ -34,6 +35,7 @@ def main():
         (f'/api/relations', RelationsHandler, dict(relations_collections=collections)),
         (f'/api/relation-pmids', RelationPmidsHandler, dict(relations_collections=collections)),
         (f'/api/stats', StatsHandler, dict(relations_collections=collections)),
+        (f'/api/suggest', SuggestHandler, dict(relations_collections=collections))
     ]
     if not options.debug:
         handlers.append((r'/static/(.*)', tornado.web.StaticFileHandler, {'path': Path(options.static_dir)}))

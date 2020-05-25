@@ -1,8 +1,8 @@
 from pathlib import Path
 from typing import Dict, Optional
 
-from server.db.relations import PaperAnalyzerDatabase
-from server.db.suggest import SuggestDatabase
+from server.data.relations import PaperAnalyzerDatabase
+from server.data.suggest import SuggestDatabase
 
 
 class CollectionData:
