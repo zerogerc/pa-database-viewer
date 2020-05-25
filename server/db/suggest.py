@@ -1,11 +1,10 @@
 from pathlib import Path
 from typing import List
 
-from sqlalchemy import Column, String, create_engine
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, String, create_engine, select
 from sqlalchemy.orm import sessionmaker
 
-Base = declarative_base()
+from server.db.base import Base
 
 
 class SuggestEntry(Base):
@@ -63,6 +62,10 @@ def main():
         SuggestEntry('123', 'chemical', 'chemical'),
         SuggestEntry('124', 'chemicalX', 'chemical'),
     ])
+
+    query = select([SuggestEntry.name])
+    with db.engine.connect() as connection:
+        print([row[SuggestEntry.name.key] for row in connection.execute(query)])
 
     result = db.suggest('n')
     print(result)
