@@ -1,3 +1,4 @@
 tornado
 sqlalchemy
 tornado-sqlalchemy
+pytest
