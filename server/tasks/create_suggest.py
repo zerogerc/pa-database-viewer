@@ -5,23 +5,24 @@ from typing import Dict, List
 from server.db.relations import PaperAnalyzerDatabase
 from server.db.suggest import SuggestEntry, SuggestDatabase
 from server.tasks.task import PreprocessTask
+from server.utils import CollectionData
 
 
 class CreateSuggestDbTask(PreprocessTask):
-    def __init__(self, directory: Path):
+    def __init__(self, directory: CollectionData):
         super(CreateSuggestDbTask, self).__init__('create-suggest-db', directory)
 
     def execute(self):
         if self.is_complete:
             return
 
-        relations_db = PaperAnalyzerDatabase(self.path_relations_db)
+        relations_db = PaperAnalyzerDatabase(self.directory.path_relations_db)
         id2possible_names: Dict[str, Counter] = defaultdict(lambda: Counter())
         for e1, e2 in relations_db.get_entity_pairs():
             id2possible_names[e1.id].update({e1.name: 1})
             id2possible_names[e2.id].update({e2.name: 1})
 
-        suggest_db = SuggestDatabase(self.path_suggest_db)
+        suggest_db = SuggestDatabase(self.directory.path_suggest_db)
         suggest_db.delete_all()
 
         entries_batch: List[SuggestEntry] = []
@@ -40,8 +41,12 @@ class CreateSuggestDbTask(PreprocessTask):
         self.set_is_complete()
 
 
-if __name__ == '__main__':
+def main():
     directory = Path('/Users/Uladzislau.Sazanovich/dev/pa-database-viewer/data/databases/LitCovid')
     create_suggest_task = CreateSuggestDbTask(directory)
 
     create_suggest_task.execute()
+
+
+if __name__ == '__main__':
+    main()

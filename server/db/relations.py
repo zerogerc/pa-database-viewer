@@ -96,7 +96,7 @@ class PaperAnalyzerDatabase:
                 ExtractedRelationEntry.name2, ExtractedRelationEntry.id2, ExtractedRelationEntry.group2,
                 ExtractedRelationEntry.label,
                 func.group_concat(ExtractedRelationEntry.pmid.distinct()).label('pmids'),
-                func.max(ExtractedRelationEntry.prob).label('combined_prob'),
+                func.max(ExtractedRelationEntry.prob).label('prob'),
             ])
 
             if id1:
@@ -111,7 +111,7 @@ class PaperAnalyzerDatabase:
             query = query.group_by(ExtractedRelationEntry.id1, ExtractedRelationEntry.group1,
                                    ExtractedRelationEntry.id2, ExtractedRelationEntry.group2,
                                    ExtractedRelationEntry.label)
-            query = query.order_by(desc('combined_prob')).limit(100)
+            query = query.order_by(desc('prob')).limit(100)
             yield from (
                 self._relation_row_to_dict(row)
                 for row in connection.execute(query)

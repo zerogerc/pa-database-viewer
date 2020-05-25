@@ -8,7 +8,8 @@ from tornado.options import define, options
 from tornado.web import Application
 
 from server.config import SERVER_CONFIG
-from server.database import PaperAnalyzerDatabase
+from server.db.relations import PaperAnalyzerDatabase
+from server.utils import CollectionData
 from server.views.main import MainHandler
 from server.views.relation_pmids import RelationPmidsHandler
 from server.views.relations import RelationsHandler
@@ -16,7 +17,7 @@ from server.views.stats import StatsHandler
 
 define('port', type=int, default=8888, help='port to listen on')
 define('debug', type=bool, default=False, help='run in debug mode')
-define('pa_db_path', type=str, default='', help='path to paper-analyzer database')
+define('collection', type=str, default='', help='path to a directory with relations and task outputs')
 define('index_path', type=str, default='', help='path to index.html')
 define('static_dir', type=str, default='', help='path to static files')
 
@@ -28,7 +29,8 @@ def main():
     tornado.options.parse_command_line()
     SERVER_CONFIG.debug = options.debug
 
-    db = PaperAnalyzerDatabase(Path(options.pa_db_path))
+    collection_data = CollectionData(Path(options.collection))
+    db = PaperAnalyzerDatabase(collection_data.path_relations_db)
 
     handlers = [
         (f'/api/relations', RelationsHandler, dict(db=db)),
