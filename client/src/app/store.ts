@@ -1,6 +1,8 @@
 import {createApi, createStore, Store} from 'effector';
 import {RelationPapersPageStore, RelationsFormValues} from './models';
 import {
+    fetchEntitySuggest,
+    FetchEntitySuggestResponse,
     fetchRawExtractedRelations,
     FetchRawExtractedRelationsResponse,
     fetchRelationPmidProbs,
@@ -69,6 +71,19 @@ export const $statsStore: Store<FetchStatsResponse> =
 
 $statsStore
     .on(fetchStats.done, (state, fetchResult) => fetchResult.result);
+
+export const $entitySuggestStore: Store<FetchEntitySuggestResponse> =
+    createStore<FetchEntitySuggestResponse>({
+        suggest: []
+    });
+
+export const clearEntitySuggestStore = createEvent<void>('clear entity suggest');
+
+$entitySuggestStore
+    .on(fetchEntitySuggest.done, (state, fetchResult) => fetchResult.result)
+    .on(clearEntitySuggestStore, () => {
+        return {suggest: []};
+    });
 
 export const $relationPapersPageStore: Store<RelationPapersPageStore> = createStore<RelationPapersPageStore>({});
 

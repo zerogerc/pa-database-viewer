@@ -3,6 +3,7 @@ import './RelationsForm.css'
 import {$relationsFormStore, relationsFormApi} from './store';
 import {useStore} from 'effector-react';
 import {fetchRelationsUsingFormValues} from './utils';
+import {SuggestView} from './views/EntitySuggest';
 
 export function RelationsForm() {
     const relationsFormValues = useStore($relationsFormStore);
@@ -43,22 +44,26 @@ export function RelationsForm() {
             <label htmlFor="form-novel" className="form-check-label">Only novel</label>
         </div>;
 
-    return <div className="RelationsForm">
-        <div className="RelationsForm-Inputs">
-            {entity1Component}
-            {entity2Component}
-            {pmidComponent}
-            {onlyNovelComponent}
-        </div>
-        <button
-            className="btn btn-primary"
-            onClick={() => {
-                fetchRelationsUsingFormValues();
-                relationsFormApi.setDefaultPage();
-            }}>
-            Make request
-        </button>
-    </div>;
+    return (
+        <div>
+            <SuggestView/>
+            <div className="RelationsForm">
+                <div className="RelationsForm-Inputs">
+                    {entity1Component}
+                    {entity2Component}
+                    {pmidComponent}
+                    {onlyNovelComponent}
+                </div>
+                <button
+                    className="btn btn-primary"
+                    onClick={() => {
+                        fetchRelationsUsingFormValues();
+                        relationsFormApi.setDefaultPage();
+                    }}>
+                    Make request
+                </button>
+            </div>
+        </div>);
 }
 
 interface FormTextInputProps {

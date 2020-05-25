@@ -1,5 +1,5 @@
 import axios, {AxiosInstance} from 'axios';
-import {PmidWithProb, RawExtractedRelation, RTypeCounts} from './models';
+import {EntitySuggestItem, PmidWithProb, RawExtractedRelation, RTypeCounts} from './models';
 import {createEffect} from 'effector';
 
 export interface FetchRawExtractedRelationsParams {
@@ -65,6 +65,22 @@ export const fetchStats =
     createEffect<FetchStatsParams, FetchStatsResponse>({
         async handler(params: FetchStatsParams) {
             const res = await Endpoint.Instance().axiosInstance.get('/api/stats', {params: params});
+            return res.data;
+        }
+    });
+
+export interface FetchEntitySuggestParams {
+    query: string
+}
+
+export interface FetchEntitySuggestResponse {
+    suggest: EntitySuggestItem[]
+}
+
+export const fetchEntitySuggest =
+    createEffect<FetchEntitySuggestParams, FetchEntitySuggestResponse>({
+        async handler(params: FetchEntitySuggestParams) {
+            const res = await Endpoint.Instance().axiosInstance.get('/api/suggest', {params: params});
             return res.data;
         }
     });

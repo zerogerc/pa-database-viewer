@@ -1,0 +1,10 @@
+.EntitySuggest-List {
+    max-height: 15rem;
+    overflow-y: auto;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+    position: absolute;
+    background-color: white;
+    width: 40%;
+    z-index: 100;
+}

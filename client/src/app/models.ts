@@ -35,3 +35,8 @@ export interface RTypeCounts {
     rType: string
     counts: number[]
 }
+
+export interface EntitySuggestItem {
+    id: string,
+    name: string
+}

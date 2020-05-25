@@ -25,6 +25,8 @@ export function App() {
 export function RelationsPage() {
     const rawExtractedRelations = useStore($rawExtractedRelationsStore);
 
+
+
     let paginationBlock = <></>;
     if (rawExtractedRelations.relations.length > 0) {
         paginationBlock = <RelationsPagination

@@ -21,7 +21,7 @@ class SuggestHandler(BaseRequestHandler):
 
     def get(self) -> None:
         query = self.get_argument('query', '')
-        items = self.relations_collections['LitCoivid'].suggest_db.suggest(query=query)
+        items = self.relations_collections['LitCovid'].suggest_db.suggest(query=query)
         self.send_response({
             'suggest': [
                 {
