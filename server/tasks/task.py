@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from server.utils import CollectionData
+from server.collection import CollectionData
 
 
 class PreprocessTask:

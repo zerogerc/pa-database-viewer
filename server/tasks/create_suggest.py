@@ -5,7 +5,7 @@ from typing import Dict, List
 from server.db.relations import PaperAnalyzerDatabase
 from server.db.suggest import SuggestEntry, SuggestDatabase
 from server.tasks.task import PreprocessTask
-from server.utils import CollectionData
+from server.collection import CollectionData
 
 
 class CreateSuggestDbTask(PreprocessTask):
@@ -42,8 +42,8 @@ class CreateSuggestDbTask(PreprocessTask):
 
 
 def main():
-    directory = Path('/Users/Uladzislau.Sazanovich/dev/pa-database-viewer/data/databases/LitCovid')
-    create_suggest_task = CreateSuggestDbTask(directory)
+    directory = Path('/Users/Uladzislau.Sazanovich/dev/pa-database-viewer/data/databases/PubMed')
+    create_suggest_task = CreateSuggestDbTask(CollectionData(directory))
 
     create_suggest_task.execute()
 

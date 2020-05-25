@@ -1,26 +1,27 @@
-from typing import Any
+from typing import Any, Dict
 
 import tornado
 from tornado import httputil
 from tornado.web import RequestHandler
 
-from server.db.relations import PaperAnalyzerDatabase
+from server.collection import CollectionData
 from server.views.base import BaseRequestHandler
 
 
 class RelationsHandler(BaseRequestHandler):
 
     def __init__(self, application: tornado.web.Application,
-                 request: httputil.HTTPServerRequest, *, db: PaperAnalyzerDatabase, **kwargs: Any) -> None:
+                 request: httputil.HTTPServerRequest, *, relations_collections: Dict[str, CollectionData],
+                 **kwargs: Any) -> None:
         super().__init__(application, request, **kwargs)
         self.relations_per_page = 10
-        self.db = db
+        self.relations_collections = relations_collections
 
     def get(self) -> None:
         only_novel = self.get_numeric_argument('only_novel', default=0)
         page = self.get_numeric_argument('page', default=0)
 
-        relations = list(self.db.get_merged_relations(
+        relations = list(self.relations_collections['LitCovid'].relations_db.get_merged_relations(
             id1=self.get_argument('id1', None),
             id2=self.get_argument('id2', None),
             pmid=self.get_argument('pmid', None),
