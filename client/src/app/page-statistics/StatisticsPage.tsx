@@ -11,9 +11,7 @@ export function StatisticsPage() {
     const relationsFormStore = useStore($relationsFormStore);
 
     useEffect(() => {
-        if (statsStore.rTypeCounts.length == 0) {
-            fetchStats({collection: relationsFormStore.collection});
-        }
+        fetchStats({collection: relationsFormStore.collection});
     }, [relationsFormStore.collection]);
 
     return (
