@@ -1,0 +1,7 @@
+.NavBar {
+    height: 3.6rem;
+}
+
+.form-inline > * {
+    margin: 0 0.5rem;
+}
