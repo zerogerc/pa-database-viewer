@@ -26,7 +26,7 @@ class SuggestHandler(BaseRequestHandler):
             'suggest': [
                 {
                     'id': item.id,
-                    'name': item.cname
+                    'name': item.name
                 } for item in items
             ]
         })
