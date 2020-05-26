@@ -1,28 +1,22 @@
 from collections import defaultdict, Counter
-from pathlib import Path
 from typing import Dict, List
 
-from server.db.relations import PaperAnalyzerDatabase
-from server.db.suggest import SuggestEntry, SuggestDatabase
-from server.tasks.task import PreprocessTask
 from server.collection import CollectionData
+from server.data.suggest import SuggestEntry
+from server.tasks.task import PreprocessTask
 
 
 class CreateSuggestDbTask(PreprocessTask):
-    def __init__(self, directory: CollectionData):
-        super(CreateSuggestDbTask, self).__init__('create-suggest-db', directory)
+    def __init__(self, directory: CollectionData, *, override_previous: bool = False):
+        super(CreateSuggestDbTask, self).__init__('create-suggest-db', directory, override_previous=override_previous)
 
-    def execute(self):
-        if self.is_complete:
-            return
-
-        relations_db = PaperAnalyzerDatabase(self.directory.path_relations_db)
+    def run_preprocessing(self):
         id2possible_names: Dict[str, Counter] = defaultdict(lambda: Counter())
-        for e1, e2 in relations_db.get_entity_pairs():
+        for e1, e2 in self.directory.relations_db.get_entity_pairs():
             id2possible_names[e1.id].update({e1.name: 1})
             id2possible_names[e2.id].update({e2.name: 1})
 
-        suggest_db = SuggestDatabase(self.directory.path_suggest_db)
+        suggest_db = self.directory.suggest_db
         suggest_db.delete_all()
 
         entries_batch: List[SuggestEntry] = []
@@ -37,16 +31,3 @@ class CreateSuggestDbTask(PreprocessTask):
                     entries_batch = []
 
         suggest_db.insert_entries(entries_batch)
-
-        self.set_is_complete()
-
-
-def main():
-    directory = Path('/Users/Uladzislau.Sazanovich/dev/pa-database-viewer/data/databases/PubMed')
-    create_suggest_task = CreateSuggestDbTask(CollectionData(directory))
-
-    create_suggest_task.execute()
-
-
-if __name__ == '__main__':
-    main()

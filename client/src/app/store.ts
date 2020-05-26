@@ -19,7 +19,7 @@ export const $relationsFormStore: Store<RelationsFormValues> = createStore<Relat
     id1: '',
     name1: '',
     id2: 'MESH:C000657245',
-    name2: 'COVID-19 infection',
+    name2: 'COVID-19',
     pmid: '',
     onlyNovel: false,
     page: 0,

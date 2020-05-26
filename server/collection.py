@@ -1,7 +1,9 @@
+import json
 from pathlib import Path
 from typing import Dict, Optional
 
 from server.data.relations import PaperAnalyzerDatabase
+from server.data.stats import RTypesStats
 from server.data.suggest import SuggestDatabase
 
 
@@ -25,12 +27,20 @@ class CollectionData:
         return self._suggest_db
 
     @property
+    def stats(self) -> RTypesStats:
+        return RTypesStats.from_json(json.loads(self.path_stats))
+
+    @property
     def path_relations_db(self) -> Path:
         return self.root / 'relations.db'
 
     @property
     def path_suggest_db(self) -> Path:
         return self.root / 'suggest.db'
+
+    @property
+    def path_stats(self) -> Path:
+        return self.root / 'stats.json'
 
 
 def read_collections(directory: Path) -> Dict[str, CollectionData]:

@@ -26,7 +26,7 @@ class RelationsHandler(BaseRequestHandler):
             id1=self.get_argument('id1', None),
             id2=self.get_argument('id2', None),
             pmid=self.get_argument('pmid', None),
-            in_ctd=0 if only_novel else None
+            in_ctd=0 if only_novel else None,
         ))
 
         total_relations = len(relations)
