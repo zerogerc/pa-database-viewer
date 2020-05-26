@@ -17,7 +17,7 @@ export function RelationsForm() {
         onChange={(eId: string, eName: string) => {
             relationsFormApi.setId1(eId);
             relationsFormApi.setName1(eName);
-            fetchEntitySuggest({query: eId});
+            fetchEntitySuggest({collection: relationsFormValues.collection, query: eId});
         }}/>;
 
     const entity2Component = <InputWithSuggestionsListView
@@ -28,7 +28,7 @@ export function RelationsForm() {
         onChange={(eId: string, eName: string) => {
             relationsFormApi.setId2(eId);
             relationsFormApi.setName2(eName);
-            fetchEntitySuggest({query: eId});
+            fetchEntitySuggest({collection: relationsFormValues.collection, query: eId});
         }}/>;
 
     const pmidComponent = <FormTextInput

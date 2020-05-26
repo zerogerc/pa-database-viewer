@@ -18,10 +18,11 @@ class RelationsHandler(BaseRequestHandler):
         self.relations_collections = relations_collections
 
     def get(self) -> None:
+        collection = self.get_argument('collection', default='LitCovid')
         only_novel = self.get_numeric_argument('only_novel', default=0)
         page = self.get_numeric_argument('page', default=0)
 
-        relations = list(self.relations_collections['LitCovid'].relations_db.get_merged_relations(
+        relations = list(self.relations_collections[collection].relations_db.get_merged_relations(
             id1=self.get_argument('id1', None),
             id2=self.get_argument('id2', None),
             pmid=self.get_argument('pmid', None),

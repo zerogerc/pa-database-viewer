@@ -1,6 +1,8 @@
 import {createApi, createStore, Store} from 'effector';
 import {RelationPapersPageStore, RelationsFormValues} from './models';
 import {
+    fetchCollections,
+    FetchCollectionsResponse,
     fetchEntitySuggest,
     FetchEntitySuggestResponse,
     fetchRawExtractedRelations,
@@ -13,6 +15,7 @@ import {
 import {createEvent} from 'effector/effector.cjs';
 
 export const $relationsFormStore: Store<RelationsFormValues> = createStore<RelationsFormValues>({
+    collection: '',
     id1: '',
     name1: '',
     id2: 'MESH:C000657245',
@@ -23,6 +26,9 @@ export const $relationsFormStore: Store<RelationsFormValues> = createStore<Relat
 });
 
 export const relationsFormApi = createApi($relationsFormStore, {
+    setCollection: (form, collection: string) => {
+        return {...form, collection: collection};
+    },
     setId1: (form, id1: string) => {
         return {...form, id1: id1};
     },
@@ -100,3 +106,14 @@ export const relationPapersPageStoreApi = createApi($relationPapersPageStore, {
         return values;
     }
 });
+
+export const $collectionsStore: Store<FetchCollectionsResponse> =
+    createStore<FetchCollectionsResponse>({
+        collections: []
+    });
+
+$collectionsStore
+    .on(fetchCollections.done, (state, fetchResult) => {
+        relationsFormApi.setCollection(fetchResult.result.collections[0]);
+        return fetchResult.result;
+    });

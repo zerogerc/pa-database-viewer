@@ -20,8 +20,11 @@ class SuggestHandler(BaseRequestHandler):
         self.relations_collections = relations_collections
 
     def get(self) -> None:
+        collection = self.get_argument('collection', default='LitCovid')
         query = self.get_argument('query', '')
-        items = self.relations_collections['LitCovid'].suggest_db.suggest(query=query)
+
+        G_LOG.info(f'Suggest, collection = {collection}')
+        items = self.relations_collections[collection].suggest_db.suggest(query=query)
         self.send_response({
             'suggest': [
                 {

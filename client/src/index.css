@@ -12,6 +12,10 @@ code {
     monospace;
 }
 
+.form-inline > * {
+    margin: 0.1rem 0.5rem;
+}
+
 .colored-list > li:nth-child(odd) {
     background-color: whitesmoke;
 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './App.css';
 import {useStore} from 'effector-react';
-import {$rawExtractedRelationsStore} from './store';
+import {$collectionsStore, $rawExtractedRelationsStore, relationsFormApi} from './store';
 import {RelationsForm} from './RelationsForm';
 import {RelationsTable} from './RelationsTable';
 import {RelationsPagination} from './RelationsPagination';
@@ -11,21 +11,30 @@ import {fetchRelationsUsingFormValues} from './utils';
 import {StatisticsPage} from './page-statistics/StatisticsPage';
 
 export function App() {
+    const collectionsStore = useStore($collectionsStore);
     return (
-        <div className="App">
-            <Switch>
-                <Route exact path="/" component={RelationsPage}/>
-                <Route exact path="/papers" component={RelationPapersPage}/>
-                <Route exact path="/stats" component={StatisticsPage}/>
-            </Switch>
+        <div>
+            <nav className="navbar navbar-dark bg-dark">
+                <form className="form-inline">
+                    {collectionsStore.collections.map((name: string) =>
+                        <button className="btn btn-sm btn-outline-info" type="button"
+                                onClick={() => relationsFormApi.setCollection(name)}>{name}</button>
+                    )}
+                </form>
+            </nav>
+            <div className="App">
+                <Switch>
+                    <Route exact path="/" component={RelationsPage}/>
+                    <Route exact path="/papers" component={RelationPapersPage}/>
+                    <Route exact path="/stats" component={StatisticsPage}/>
+                </Switch>
+            </div>
         </div>
     );
 }
 
 export function RelationsPage() {
     const rawExtractedRelations = useStore($rawExtractedRelationsStore);
-
-
 
     let paginationBlock = <></>;
     if (rawExtractedRelations.relations.length > 0) {

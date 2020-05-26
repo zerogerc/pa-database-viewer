@@ -2,7 +2,23 @@ import axios, {AxiosInstance} from 'axios';
 import {EntitySuggestItem, PmidWithProb, RawExtractedRelation, RTypeCounts} from './models';
 import {createEffect} from 'effector';
 
+export interface FetchCollectionsParams {
+}
+
+export interface FetchCollectionsResponse {
+    collections: string[]
+}
+
+export const fetchCollections =
+    createEffect<FetchCollectionsParams, FetchCollectionsResponse>({
+        async handler(params: FetchCollectionsParams) {
+            const res = await Endpoint.Instance().axiosInstance.get('/api/collections', {params: params});
+            return res.data;
+        }
+    });
+
 export interface FetchRawExtractedRelationsParams {
+    collection: string
     id1: string
     id2: string
     pmid: string
@@ -70,6 +86,7 @@ export const fetchStats =
     });
 
 export interface FetchEntitySuggestParams {
+    collection: string,
     query: string
 }
 

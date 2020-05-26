@@ -5,6 +5,7 @@ export function fetchRelationsUsingFormValues() {
     const formState = $relationsFormStore.getState();
 
     return fetchRawExtractedRelations({
+        collection: formState.collection,
         id1: formState.id1,
         id2: formState.id2,
         pmid: formState.pmid,

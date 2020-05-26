@@ -18,6 +18,7 @@ export interface PmidWithProb {
 }
 
 export interface RelationsFormValues {
+    collection: string
     id1: string
     name1: string
     id2: string
