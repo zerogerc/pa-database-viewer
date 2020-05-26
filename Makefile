@@ -1,7 +1,7 @@
 COLLECTIONS_DIR = "data/databases"
 
 init:
-	cd client && yarn build && cd .. &&\
+	cd client && npm install && yarn build && cd .. &&\
 	python3 -m pip install -r server/reqs.txt
 
 run-preprocessing:
