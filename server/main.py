@@ -9,6 +9,7 @@ from tornado.web import Application
 
 from server.collection import read_collections
 from server.config import SERVER_CONFIG
+from server.views.collections import CollectionsHandler
 from server.views.main import MainHandler
 from server.views.relation_pmids import RelationPmidsHandler
 from server.views.relations import RelationsHandler
@@ -35,7 +36,8 @@ def main():
         (f'/api/relations', RelationsHandler, dict(relations_collections=collections)),
         (f'/api/relation-pmids', RelationPmidsHandler, dict(relations_collections=collections)),
         (f'/api/stats', StatsHandler, dict(relations_collections=collections)),
-        (f'/api/suggest', SuggestHandler, dict(relations_collections=collections))
+        (f'/api/suggest', SuggestHandler, dict(relations_collections=collections)),
+        (f'/api/collections', CollectionsHandler, dict(relations_collections=collections))
     ]
     if not options.debug:
         handlers.append((r'/static/(.*)', tornado.web.StaticFileHandler, {'path': Path(options.static_dir)}))
