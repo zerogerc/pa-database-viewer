@@ -14,7 +14,9 @@ import {createEvent} from 'effector/effector.cjs';
 
 export const $relationsFormStore: Store<RelationsFormValues> = createStore<RelationsFormValues>({
     id1: '',
-    id2: 'MESH:C000657245', // COVID-19 infection
+    name1: '',
+    id2: 'MESH:C000657245',
+    name2: 'COVID-19 infection',
     pmid: '',
     onlyNovel: false,
     page: 0,
@@ -24,8 +26,14 @@ export const relationsFormApi = createApi($relationsFormStore, {
     setId1: (form, id1: string) => {
         return {...form, id1: id1};
     },
+    setName1: (form, name1: string) => {
+        return {...form, name1: name1};
+    },
     setId2: (form, id2: string) => {
         return {...form, id2: id2};
+    },
+    setName2: (form, name2: string) => {
+        return {...form, name2: name2};
     },
     setPmid: (form, pmid: string) => {
         return {...form, pmid: pmid};

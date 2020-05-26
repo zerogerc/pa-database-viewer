@@ -3,25 +3,32 @@ import './RelationsForm.css'
 import {$relationsFormStore, relationsFormApi} from './store';
 import {useStore} from 'effector-react';
 import {fetchRelationsUsingFormValues} from './utils';
-import {SuggestView} from './views/EntitySuggest';
+import {InputWithSuggestionsListView} from './views/InputWithSuggestionsListView';
+import {fetchEntitySuggest} from './api';
 
 export function RelationsForm() {
     const relationsFormValues = useStore($relationsFormStore);
 
-    const entity1Component = <FormTextInput
+    const entity1Component = <InputWithSuggestionsListView
         id="form-e1"
         label="Left entity"
-        value={relationsFormValues.id1}
-        onChange={(e: React.FormEvent<HTMLInputElement>) => {
-            relationsFormApi.setId1(e.currentTarget.value);
+        entityId={relationsFormValues.id1}
+        entityName={relationsFormValues.name1}
+        onChange={(eId: string, eName: string) => {
+            relationsFormApi.setId1(eId);
+            relationsFormApi.setName1(eName);
+            fetchEntitySuggest({query: eId});
         }}/>;
 
-    const entity2Component = <FormTextInput
+    const entity2Component = <InputWithSuggestionsListView
         id="form-e2"
         label="Right entity"
-        value={relationsFormValues.id2}
-        onChange={(e: React.FormEvent<HTMLInputElement>) => {
-            relationsFormApi.setId2(e.currentTarget.value);
+        entityId={relationsFormValues.id2}
+        entityName={relationsFormValues.name2}
+        onChange={(eId: string, eName: string) => {
+            relationsFormApi.setId2(eId);
+            relationsFormApi.setName2(eName);
+            fetchEntitySuggest({query: eId});
         }}/>;
 
     const pmidComponent = <FormTextInput
@@ -46,7 +53,6 @@ export function RelationsForm() {
 
     return (
         <div>
-            <SuggestView/>
             <div className="RelationsForm">
                 <div className="RelationsForm-Inputs">
                     {entity1Component}
@@ -76,7 +82,7 @@ interface FormTextInputProps {
 function FormTextInput(props: FormTextInputProps) {
     return <div className="form-group">
         <label htmlFor={props.id}>{props.label}</label>
-        <input className="form-control form-control-sm" id={props.id}
+        <input className="form-control" id={props.id}
                onChange={props.onChange} value={props.value}
         />
     </div>;

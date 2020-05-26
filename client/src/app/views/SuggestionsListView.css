@@ -1,4 +1,4 @@
-.EntitySuggest-List {
+.SuggestionsListView {
     max-height: 15rem;
     overflow-y: auto;
     border: 1px solid rgba(0, 0, 0, 0.125);

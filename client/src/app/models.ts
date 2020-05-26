@@ -19,7 +19,9 @@ export interface PmidWithProb {
 
 export interface RelationsFormValues {
     id1: string
+    name1: string
     id2: string
+    name2: string
     pmid: string
     onlyNovel: boolean
     page: number
