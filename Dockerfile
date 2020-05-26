@@ -1,4 +1,4 @@
-FROM python:3.6-slim-buster
+FROM python:3.6
 
 RUN apt-get update -yy && \
     apt-get install -yy make python3.6 python3-pip
