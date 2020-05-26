@@ -28,7 +28,7 @@ class CollectionData:
 
     @property
     def stats(self) -> RTypesStats:
-        return RTypesStats.from_json(json.loads(self.path_stats))
+        return RTypesStats.from_json(json.loads(self.path_stats.read_text()))
 
     @property
     def path_relations_db(self) -> Path:

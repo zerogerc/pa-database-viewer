@@ -70,7 +70,7 @@ export const fetchRelationPmidProbs =
     });
 
 export interface FetchStatsParams {
-
+    collection: string
 }
 
 export interface FetchStatsResponse {

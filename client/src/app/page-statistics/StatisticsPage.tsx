@@ -1,19 +1,20 @@
 import * as React from 'react';
 import {useEffect} from 'react';
-import './StatisticsPage.css';
 import {Chart} from 'chart.js';
 import {RelationTypeCountsChart} from './RelationTypeCountsChart';
-import {$statsStore} from '../store';
+import {$relationsFormStore, $statsStore} from '../store';
 import {fetchStats} from '../api';
 import {useStore} from 'effector-react';
 
 export function StatisticsPage() {
     const statsStore = useStore($statsStore);
+    const relationsFormStore = useStore($relationsFormStore);
+
     useEffect(() => {
         if (statsStore.rTypeCounts.length == 0) {
-            fetchStats({});
+            fetchStats({collection: relationsFormStore.collection});
         }
-    });
+    }, [relationsFormStore.collection]);
 
     return (
         <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr'}}>

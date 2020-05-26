@@ -5,17 +5,25 @@ import {RelationPapersPage} from './page-relation-papers/RelationPapersPage';
 import {StatisticsPage} from './page-statistics/StatisticsPage';
 import {NavBar} from './views/NavBar';
 import {RelationsPage} from './page-relations/RelationsPage';
+import {$collectionsStore} from './store';
+import {useStore} from 'effector-react';
 
 export function App() {
+    const collectionsStore = useStore($collectionsStore);
+    let app = <></>;
+    if (collectionsStore.collections.length != 0) {
+        app =
+            <Switch>
+                <Route exact path="/" component={RelationsPage}/>
+                <Route exact path="/papers" component={RelationPapersPage}/>
+                <Route exact path="/stats" component={StatisticsPage}/>
+            </Switch>
+    }
     return (
         <div>
             <NavBar/>
             <div className="App">
-                <Switch>
-                    <Route exact path="/" component={RelationsPage}/>
-                    <Route exact path="/papers" component={RelationPapersPage}/>
-                    <Route exact path="/stats" component={StatisticsPage}/>
-                </Switch>
+                {app}
             </div>
         </div>
     );

@@ -27,6 +27,9 @@ export const $relationsFormStore: Store<RelationsFormValues> = createStore<Relat
 
 export const relationsFormApi = createApi($relationsFormStore, {
     setCollection: (form, collection: string) => {
+        clearStatsStore();
+        clearRawExtractedRelationsStore();
+        clearRelationPmidProbsStore();
         return {...form, collection: collection};
     },
     setId1: (form, id1: string) => {
@@ -62,8 +65,17 @@ export const $rawExtractedRelationsStore: Store<FetchRawExtractedRelationsRespon
         totalPages: 0,
     });
 
+export const clearRawExtractedRelationsStore = createEvent<void>('clear relations');
+
 $rawExtractedRelationsStore
-    .on(fetchRawExtractedRelations.done, (state, fetchResult) => fetchResult.result);
+    .on(fetchRawExtractedRelations.done, (state, fetchResult) => fetchResult.result)
+    .on(clearRawExtractedRelationsStore, () => {
+        return {
+            relations: [],
+            page: 0,
+            totalPages: 0
+        }
+    });
 
 export const $relationPmidProbsStore: Store<FetchRelationPmidProbsResponse> =
     createStore<FetchRelationPmidProbsResponse>({
@@ -83,8 +95,13 @@ export const $statsStore: Store<FetchStatsResponse> =
         rTypeCounts: []
     });
 
+export const clearStatsStore = createEvent<void>('clear stats');
+
 $statsStore
-    .on(fetchStats.done, (state, fetchResult) => fetchResult.result);
+    .on(fetchStats.done, (state, fetchResult) => fetchResult.result)
+    .on(clearStatsStore, () => {
+        return {rTypeCounts: []}
+    });
 
 export const $entitySuggestStore: Store<FetchEntitySuggestResponse> =
     createStore<FetchEntitySuggestResponse>({
