@@ -1,8 +1,8 @@
-import React from 'react';
+import * as React from 'react';
 import './RelationsTable.css'
-import {RawExtractedRelation} from './models';
-import {RelationPapersButton} from './views/RelationPapersButton';
-import {EntityView} from './EntityViewV';
+import {RawExtractedRelation} from '../models';
+import {RelationPapersButton} from '../views/RelationPapersButton';
+import {EntityView} from '../views/EntityView';
 
 export function RelationsTable(props: { relations: Array<RawExtractedRelation> }) {
     return <div>

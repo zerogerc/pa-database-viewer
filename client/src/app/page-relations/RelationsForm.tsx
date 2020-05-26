@@ -1,10 +1,10 @@
-import React from 'react';
+import * as React from 'react';
 import './RelationsForm.css'
-import {$relationsFormStore, relationsFormApi} from './store';
+import {$relationsFormStore, relationsFormApi} from '../store';
 import {useStore} from 'effector-react';
-import {fetchRelationsUsingFormValues} from './utils';
-import {InputWithSuggestionsListView} from './views/InputWithSuggestionsListView';
-import {fetchEntitySuggest} from './api';
+import {fetchRelationsUsingFormValues} from '../utils';
+import {InputWithSuggestionsListView} from '../views/InputWithSuggestionsListView';
+import {fetchEntitySuggest} from '../api';
 
 export function RelationsForm() {
     const relationsFormValues = useStore($relationsFormStore);

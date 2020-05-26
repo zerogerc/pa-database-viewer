@@ -3,7 +3,7 @@ import './RelationPapersPage.css';
 import {useStore} from 'effector-react';
 import {$relationPapersPageStore, $relationPmidProbsStore, clearRelationPmidProbsStore} from '../store';
 import {PubmedPaperView} from '../views/PubmedPaperView';
-import {EntityView} from '../EntityViewV';
+import {EntityView} from '../views/EntityView';
 
 export function RelationPapersPage() {
     const pageStore = useStore($relationPapersPageStore);

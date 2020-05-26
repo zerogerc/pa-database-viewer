@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {relationsFormApi} from './store';
+import {relationsFormApi} from '../store';
 
 export function RelationsPagination(props: { page: number, totalPages: number, onPageSelected: () => void }): React.ReactElement {
 
