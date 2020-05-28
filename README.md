@@ -1,12 +1,16 @@
 # Paper analyzer relations viewer
 
 ## Running the server
-To run server first create a directory with the name `data` and 
-download database from [here](https://drive.google.com/open?id=13ECQHnNMcJXqxHAIJJwNu5s7drHXL0Sa). 
-We will host this database on a server in the future.
+Call `make run-production` to run a server.
 
-Call `./scripts/run_server_production.sh` after data download.
+## Adding a collection of relations
+
+The collection of relations should be added to `data/databases/$COLLECTION_NAME/relationds.db`. 
+Run `make run-preprocessing` to preprocess the collections and cache files needed for server.
+
+The database with extracted relations could be downloaded from [here](https://drive.google.com/open?id=13ECQHnNMcJXqxHAIJJwNu5s7drHXL0Sa).
+I will host this database on a server in the future.
 
 ## Debugging
-Run server with `./scripts/run_server_debug.sh` and go to client directory. From there you can call `yarn start`.
+Run server with `make run-debug`, then go to client directory and call `yarn start` to run UI in debug mode.
 
