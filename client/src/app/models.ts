@@ -4,9 +4,9 @@ export interface Entity {
     group: string
 }
 
-export interface RawExtractedRelation {
-    head: Entity
-    tail: Entity
+export interface MergedRelation {
+    entity1: Entity
+    entity2: Entity
     label: string
     pmids: string[]
     prob: number

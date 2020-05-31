@@ -1,5 +1,5 @@
 import axios, {AxiosInstance} from 'axios';
-import {EntitySuggestItem, PmidWithProb, RawExtractedRelation, RTypeCounts} from './models';
+import {EntitySuggestItem, PmidWithProb, MergedRelation, RTypeCounts} from './models';
 import {createEffect} from 'effector';
 
 export interface FetchCollectionsParams {
@@ -27,7 +27,7 @@ export interface FetchRawExtractedRelationsParams {
 }
 
 export interface FetchRawExtractedRelationsResponse {
-    relations: Array<RawExtractedRelation>
+    relations: Array<MergedRelation>
     page: number
     totalPages: number
 }
@@ -38,14 +38,9 @@ export const fetchRawExtractedRelations =
             const res = await Endpoint.Instance().axiosInstance.get('/api/relations', {params: params});
             const rawData = res.data;
             return {
-                relations: rawData['relations'].map((raw: any) => {
-                    return {
-                        head: {name: raw['name1'], id: raw['id1'], group: raw['group1']},
-                        tail: {name: raw['name2'], id: raw['id2'], group: raw['group2']},
-                        label: raw['label'], prob: raw['prob'], pmids: raw['pmids'],
-                    }
-                }),
-                page: rawData['page'], totalPages: rawData['totalPages']
+                relations: rawData['relations'],
+                page: rawData['page'],
+                totalPages: rawData['totalPages']
             }
         }
     });

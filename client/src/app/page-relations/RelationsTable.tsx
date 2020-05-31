@@ -1,10 +1,10 @@
 import * as React from 'react';
 import './RelationsTable.css'
-import {RawExtractedRelation} from '../models';
+import {MergedRelation} from '../models';
 import {RelationPapersButton} from '../views/RelationPapersButton';
 import {EntityView} from '../views/EntityView';
 
-export function RelationsTable(props: { relations: Array<RawExtractedRelation> }) {
+export function RelationsTable(props: { relations: Array<MergedRelation> }) {
     return <div>
         {createRelationsRow(
             <span>Entity 1</span>,
@@ -15,14 +15,14 @@ export function RelationsTable(props: { relations: Array<RawExtractedRelation> }
             "RelationsTable-Row-Header"
         )}
         <ul className="RelationsTable-List colored-list">
-            {props.relations.map((item: RawExtractedRelation) => {
+            {props.relations.map((item: MergedRelation) => {
                 return <li>
                     {createRelationsRow(
-                        <EntityView entity={item.head}/>,
-                        <EntityView entity={item.tail}/>,
+                        <EntityView entity={item.entity1}/>,
+                        <EntityView entity={item.entity2}/>,
                         <span>{item.label}</span>,
                         <RelationPapersButton
-                            head={item.head} tail={item.tail} label={item.label} pmids={item.pmids}
+                            head={item.entity1} tail={item.entity2} label={item.label} pmids={item.pmids}
                         />,
                         <span>{item.prob.toFixed(4)}</span>
                     )}

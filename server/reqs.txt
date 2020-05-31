@@ -1,4 +1,4 @@
+attrs
 tornado
 sqlalchemy
-tornado-sqlalchemy
 pytest

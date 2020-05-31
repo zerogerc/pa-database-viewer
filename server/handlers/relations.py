@@ -1,11 +1,12 @@
 from typing import Any, Dict
 
+import attr
 import tornado
 from tornado import httputil
 from tornado.web import RequestHandler
 
 from server.collection import CollectionData
-from server.views.base import BaseRequestHandler
+from server.handlers.base import BaseRequestHandler
 
 
 class RelationsHandler(BaseRequestHandler):
@@ -34,7 +35,8 @@ class RelationsHandler(BaseRequestHandler):
         page = min(page, total_pages)
 
         self.send_response({
-            'relations': relations[self.relations_per_page * page: self.relations_per_page * (page + 1)],
+            'relations': [attr.asdict(r, recurse=True) for r in
+                          relations[self.relations_per_page * page: self.relations_per_page * (page + 1)]],
             'page': page,
             'totalPages': total_pages,
         })

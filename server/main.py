@@ -9,12 +9,12 @@ from tornado.web import Application
 
 from server.collection import read_collections
 from server.config import SERVER_CONFIG
-from server.views.collections import CollectionsHandler
-from server.views.main import MainHandler
-from server.views.relation_pmids import RelationPmidsHandler
-from server.views.relations import RelationsHandler
-from server.views.stats import StatsHandler
-from server.views.suggest import SuggestHandler
+from server.handlers.collections import CollectionsHandler
+from server.handlers.main import MainHandler
+from server.handlers.relation_pmids import RelationPmidsHandler
+from server.handlers.relations import RelationsHandler
+from server.handlers.stats import StatsHandler
+from server.handlers.suggest import SuggestHandler
 
 define('port', type=int, default=8888, help='port to listen on')
 define('debug', type=bool, default=False, help='run in debug mode')
