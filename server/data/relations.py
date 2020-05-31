@@ -3,6 +3,7 @@ from types import SimpleNamespace
 from typing import Any, Iterator, Optional, Tuple, Dict, List
 
 from sqlalchemy import create_engine, Column, Float, String, select, func, Integer, desc
+from sqlalchemy.orm import sessionmaker
 
 from server.data.base import Base
 
@@ -21,9 +22,16 @@ class ExtractedRelationEntry(Base):
     prob = Column(Float)
     in_ctd = Column(Integer)
 
-
-COLUMNS_ENTITY_1 = [ExtractedRelationEntry.name1, ExtractedRelationEntry.id1, ExtractedRelationEntry.group1]
-COLUMNS_ENTITY_2 = [ExtractedRelationEntry.name2, ExtractedRelationEntry.id2, ExtractedRelationEntry.group2]
+    def __init__(self,
+                 name1: str, id1: str, group1: str,
+                 name2: str, id2: str, group2: str,
+                 label: str, pmid: str, prob: float, in_ctd: int):
+        self.name1, self.id1, self.group1 = name1, id1, group1
+        self.name2, self.id2, self.group2 = name2, id2, group2
+        self.label = label
+        self.pmid = pmid
+        self.prob = prob
+        self.in_ctd = in_ctd
 
 
 class BioEntity(SimpleNamespace):
@@ -44,10 +52,25 @@ class BioEntity(SimpleNamespace):
                          group=row[ExtractedRelationEntry.group2.key])
 
 
-class PaperAnalyzerDatabase:
+COLUMNS_ENTITY_1 = [ExtractedRelationEntry.name1, ExtractedRelationEntry.id1, ExtractedRelationEntry.group1]
+COLUMNS_ENTITY_2 = [ExtractedRelationEntry.name2, ExtractedRelationEntry.id2, ExtractedRelationEntry.group2]
+
+
+class ExtractedRelationsDatabase:
 
     def __init__(self, db_path: Path):
         self.db_engine = create_engine('sqlite:///{}'.format(db_path))
+        self.session_maker = sessionmaker(bind=self.db_engine)
+
+    def insert_entries(self, entries: List[ExtractedRelationEntry]):
+        session = self.session_maker()
+        session.add_all(entries)
+        session.commit()
+
+    def delete_all(self):
+        session = self.session_maker()
+        session.query(ExtractedRelationEntry).delete()
+        session.commit()
 
     def get_entity_pairs(self) -> Iterator[Tuple[BioEntity, BioEntity]]:
         with self.db_engine.connect() as connection:
@@ -89,7 +112,7 @@ class PaperAnalyzerDatabase:
 
             yield from (dict(row) for row in connection.execute(query))
 
-    def get_merged_relations(self, id1: Optional[str], id2: Optional[str], pmid: Optional[str],
+    def get_merged_relations(self, id1: Optional[str] = None, id2: Optional[str] = None, pmid: Optional[str] = None,
                              in_ctd: Optional[int] = None) -> Iterator[Any]:
         if id1 is None and id2 is None and pmid is None:
             return []
@@ -125,15 +148,3 @@ class PaperAnalyzerDatabase:
         result = dict(row)
         result['pmids'] = result['pmids'].split(',')
         return result
-
-
-def main():
-    db_path = Path('/Users/Uladzislau.Sazanovich/dev/pa-database-viewer/data/pa-covid.db')
-    db = PaperAnalyzerDatabase(db_path)
-
-    for e1, e2 in db.get_entity_pairs():
-        print(e1, e2)
-
-
-if __name__ == '__main__':
-    main()

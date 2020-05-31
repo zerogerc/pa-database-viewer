@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from typing import Dict, Optional
 
-from server.data.relations import PaperAnalyzerDatabase
+from server.data.relations import ExtractedRelationsDatabase
 from server.data.stats import RTypesStats
 from server.data.suggest import SuggestDatabase
 
@@ -11,13 +11,13 @@ class CollectionData:
 
     def __init__(self, root: Path):
         self.root = root
-        self._relations_db: Optional[PaperAnalyzerDatabase] = None
+        self._relations_db: Optional[ExtractedRelationsDatabase] = None
         self._suggest_db: Optional[SuggestDatabase] = None
 
     @property
-    def relations_db(self) -> PaperAnalyzerDatabase:
+    def relations_db(self) -> ExtractedRelationsDatabase:
         if self._relations_db is None:
-            self._relations_db = PaperAnalyzerDatabase(self.path_relations_db)
+            self._relations_db = ExtractedRelationsDatabase(self.path_relations_db)
         return self._relations_db
 
     @property

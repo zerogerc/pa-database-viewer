@@ -1,6 +1,6 @@
 import pytest
 
-from server.db.suggest import SuggestDatabase, SuggestEntry
+from server.data.suggest import SuggestDatabase, SuggestEntry
 from server.utils import create_tempdir
 
 
