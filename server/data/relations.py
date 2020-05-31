@@ -97,38 +97,6 @@ class ExtractedRelationsDatabase:
                 for row in connection.execute(query)
             )
 
-    def get_relation_types(self) -> Iterator[str]:
-        with self.db_engine.connect() as connection:
-            query = select([ExtractedRelationEntry.label]).distinct(ExtractedRelationEntry.label)
-            yield from (
-                row[ExtractedRelationEntry.label.key]
-                for row in connection.execute(query)
-            )
-
-    def get_relation_type_counts(self, min_prob: float, max_prob: float) -> Iterator[Tuple[str, int]]:
-        with self.db_engine.connect() as connection:
-            query = select([
-                ExtractedRelationEntry.label,
-                func.count().label('count')
-            ]) \
-                .where(min_prob < ExtractedRelationEntry.prob) \
-                .where(ExtractedRelationEntry.prob <= max_prob) \
-                .group_by(ExtractedRelationEntry.label)
-            yield from (
-                (row[ExtractedRelationEntry.label.key], row['count'])
-                for row in connection.execute(query)
-            )
-
-    def get_relation_pmid_probs(self, id1: str, id2: str, label: str, pmids: List[str]) -> Iterator[Any]:
-        with self.db_engine.connect() as connection:
-            query = select([ExtractedRelationEntry.pmid, ExtractedRelationEntry.prob]) \
-                .where(ExtractedRelationEntry.id1 == id1) \
-                .where(ExtractedRelationEntry.id2 == id2) \
-                .where(ExtractedRelationEntry.label == label) \
-                .where(ExtractedRelationEntry.pmid.in_(pmids))
-
-            yield from (dict(row) for row in connection.execute(query))
-
     def get_merged_relations(self, id1: Optional[str] = None, id2: Optional[str] = None, pmid: Optional[str] = None,
                              in_ctd: Optional[int] = None) -> Iterator[MergedRelationEntry]:
         if id1 is None and id2 is None and pmid is None:
@@ -158,5 +126,37 @@ class ExtractedRelationsDatabase:
             query = query.order_by(desc('prob')).limit(100)
             yield from (
                 MergedRelationEntry.from_row(row)
+                for row in connection.execute(query)
+            )
+
+    def get_relation_pmid_probs(self, id1: str, id2: str, label: str, pmids: List[str]) -> Iterator[Any]:
+        with self.db_engine.connect() as connection:
+            query = select([ExtractedRelationEntry.pmid, ExtractedRelationEntry.prob]) \
+                .where(ExtractedRelationEntry.id1 == id1) \
+                .where(ExtractedRelationEntry.id2 == id2) \
+                .where(ExtractedRelationEntry.label == label) \
+                .where(ExtractedRelationEntry.pmid.in_(pmids))
+
+            yield from (dict(row) for row in connection.execute(query))
+
+    def get_relation_types(self) -> Iterator[str]:
+        with self.db_engine.connect() as connection:
+            query = select([ExtractedRelationEntry.label]).distinct(ExtractedRelationEntry.label)
+            yield from (
+                row[ExtractedRelationEntry.label.key]
+                for row in connection.execute(query)
+            )
+
+    def get_relation_type_counts(self, min_prob: float, max_prob: float) -> Iterator[Tuple[str, int]]:
+        with self.db_engine.connect() as connection:
+            query = select([
+                ExtractedRelationEntry.label,
+                func.count().label('count')
+            ]) \
+                .where(min_prob < ExtractedRelationEntry.prob) \
+                .where(ExtractedRelationEntry.prob <= max_prob) \
+                .group_by(ExtractedRelationEntry.label)
+            yield from (
+                (row[ExtractedRelationEntry.label.key], row['count'])
                 for row in connection.execute(query)
             )
