@@ -2,6 +2,7 @@ import pytest
 
 from server.data.relations import ExtractedRelationsDatabase, ExtractedRelationEntry, MergedRelation, RelationPmidProb, \
     BioEntity
+from server.entities import GENE, CHEMICAL, DISEASE
 from server.utils import create_tempdir
 
 
@@ -27,8 +28,8 @@ def _relation_entry_from_entities(e1: BioEntity, e2: BioEntity, label: str, pmid
 
 
 def test_get_entity_pairs(relations_db: ExtractedRelationsDatabase):
-    c1 = BioEntity('c1', 'cn1', 'CHEMICAL')
-    g1, g2 = BioEntity('g1', 'gn1', 'GENE'), BioEntity('g2', 'gn2', 'GENE')
+    c1 = BioEntity('c1', 'cn1', CHEMICAL)
+    g1, g2 = BioEntity('g1', 'gn1', GENE), BioEntity('g2', 'gn2', GENE)
     relations_db.insert_entries([
         _relation_entry_from_entities(c1, g1, 'expression', pmid='1', prob=0.9),
         _relation_entry_from_entities(c1, g1, 'expression', pmid='2', prob=0.5),
@@ -42,9 +43,9 @@ def test_get_entity_pairs(relations_db: ExtractedRelationsDatabase):
 
 
 def test_merged_relations_eid1_filter(relations_db: ExtractedRelationsDatabase):
-    c1 = BioEntity('c1', 'cn1', 'CHEMICAL')
-    g1, g2 = BioEntity('g1', 'gn1', 'GENE'), BioEntity('g2', 'gn2', 'GENE')
-    d1 = BioEntity('d1', 'dn1', 'DISEASE')
+    c1 = BioEntity('c1', 'cn1', CHEMICAL)
+    g1, g2 = BioEntity('g1', 'gn1', GENE), BioEntity('g2', 'gn2', GENE)
+    d1 = BioEntity('d1', 'dn1', DISEASE)
 
     relations_db.insert_entries([
         _relation_entry_from_entities(c1, g1, 'expression', pmid='1', prob=0.9),
@@ -60,9 +61,9 @@ def test_merged_relations_eid1_filter(relations_db: ExtractedRelationsDatabase):
 
 
 def test_merged_relations_eid2_filter(relations_db: ExtractedRelationsDatabase):
-    c1 = BioEntity('c1', 'cn1', 'CHEMICAL')
-    g1, g2 = BioEntity('g1', 'gn1', 'GENE'), BioEntity('g2', 'gn2', 'GENE')
-    d1 = BioEntity('d1', 'dn1', 'DISEASE')
+    c1 = BioEntity('c1', 'cn1', CHEMICAL)
+    g1, g2 = BioEntity('g1', 'gn1', GENE), BioEntity('g2', 'gn2', GENE)
+    d1 = BioEntity('d1', 'dn1', DISEASE)
 
     relations_db.insert_entries([
         _relation_entry_from_entities(c1, g1, 'expression', pmid='1', prob=0.9),
@@ -77,9 +78,9 @@ def test_merged_relations_eid2_filter(relations_db: ExtractedRelationsDatabase):
 
 
 def test_merged_relations_pmid_filter(relations_db: ExtractedRelationsDatabase):
-    c1 = BioEntity('c1', 'cn1', 'CHEMICAL')
-    g1, g2 = BioEntity('g1', 'gn1', 'GENE'), BioEntity('g2', 'gn2', 'GENE')
-    d1 = BioEntity('d1', 'dn1', 'DISEASE')
+    c1 = BioEntity('c1', 'cn1', CHEMICAL)
+    g1, g2 = BioEntity('g1', 'gn1', GENE), BioEntity('g2', 'gn2', GENE)
+    d1 = BioEntity('d1', 'dn1', DISEASE)
 
     relations_db.insert_entries([
         _relation_entry_from_entities(c1, g1, 'expression', pmid='1', prob=0.9),
@@ -94,8 +95,8 @@ def test_merged_relations_pmid_filter(relations_db: ExtractedRelationsDatabase):
 
 
 def test_get_relation_pmid_probs_all_pmids(relations_db: ExtractedRelationsDatabase):
-    c1 = BioEntity('c1', 'cn1', 'CHEMICAL')
-    g1, g2 = BioEntity('g1', 'gn1', 'GENE'), BioEntity('g2', 'gn2', 'GENE')
+    c1 = BioEntity('c1', 'cn1', CHEMICAL)
+    g1, g2 = BioEntity('g1', 'gn1', GENE), BioEntity('g2', 'gn2', GENE)
 
     relations_db.insert_entries([
         _relation_entry_from_entities(c1, g1, 'expression', pmid='1', prob=0.9),
@@ -108,8 +109,8 @@ def test_get_relation_pmid_probs_all_pmids(relations_db: ExtractedRelationsDatab
 
 
 def test_get_relation_pmid_probs_pmids_subset(relations_db: ExtractedRelationsDatabase):
-    c1 = BioEntity('c1', 'cn1', 'CHEMICAL')
-    g1, g2 = BioEntity('g1', 'gn1', 'GENE'), BioEntity('g2', 'gn2', 'GENE')
+    c1 = BioEntity('c1', 'cn1', CHEMICAL)
+    g1, g2 = BioEntity('g1', 'gn1', GENE), BioEntity('g2', 'gn2', GENE)
 
     relations_db.insert_entries([
         _relation_entry_from_entities(c1, g1, 'expression', pmid='1', prob=0.9),
