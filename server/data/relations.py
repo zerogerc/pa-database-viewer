@@ -6,6 +6,7 @@ from sqlalchemy import create_engine, Column, Float, String, select, func, Integ
 from sqlalchemy.orm import sessionmaker
 
 from server.data.base import Base
+from server.entities import SUPPORTED_ENTITY_GROUPS
 
 
 class ExtractedRelationEntry(Base):
@@ -34,11 +35,11 @@ class ExtractedRelationEntry(Base):
         self.in_ctd = in_ctd
 
 
-@attr.s
+@attr.s(auto_attribs=True, frozen=True)
 class BioEntity:
-    id: str = attr.ib()
-    name: str = attr.ib()
-    group: str = attr.ib()
+    id: str
+    name: str
+    group: str = attr.ib(validator=lambda _, a, val: val in SUPPORTED_ENTITY_GROUPS)
 
     @staticmethod
     def extract_1_from_row(row: Dict[str, Any]) -> 'BioEntity':
@@ -53,20 +54,30 @@ class BioEntity:
                          group=row[ExtractedRelationEntry.group2.key])
 
 
-@attr.s
-class MergedRelationEntry:
-    entity1: BioEntity = attr.ib()
-    entity2: BioEntity = attr.ib()
-    label: str = attr.ib()
-    pmids: List[str] = attr.ib()
-    prob: float = attr.ib()
+@attr.s(auto_attribs=True, frozen=True)
+class MergedRelation:
+    entity1: BioEntity
+    entity2: BioEntity
+    label: str
+    pmids: List[str]
+    prob: float
 
     @staticmethod
-    def from_row(row: Dict[str, Any]) -> 'MergedRelationEntry':
-        return MergedRelationEntry(
+    def from_row(row: Dict[str, Any]) -> 'MergedRelation':
+        return MergedRelation(
             entity1=BioEntity.extract_1_from_row(row), entity2=BioEntity.extract_2_from_row(row),
             label=row['label'], pmids=row['pmids'].split(','), prob=row['prob']
         )
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class RelationPmidProb:
+    pmid: str
+    prob: float
+
+    @staticmethod
+    def from_row(row: Dict[str, Any]) -> 'RelationPmidProb':
+        return RelationPmidProb(row['pmid'], row['prob'])
 
 
 COLUMNS_ENTITY_1 = [ExtractedRelationEntry.name1, ExtractedRelationEntry.id1, ExtractedRelationEntry.group1]
@@ -98,7 +109,7 @@ class ExtractedRelationsDatabase:
             )
 
     def get_merged_relations(self, id1: Optional[str] = None, id2: Optional[str] = None, pmid: Optional[str] = None,
-                             in_ctd: Optional[int] = None) -> Iterator[MergedRelationEntry]:
+                             in_ctd: Optional[int] = None) -> Iterator[MergedRelation]:
         if id1 is None and id2 is None and pmid is None:
             return []
 
@@ -125,7 +136,7 @@ class ExtractedRelationsDatabase:
                                    ExtractedRelationEntry.label)
             query = query.order_by(desc('prob')).limit(100)
             yield from (
-                MergedRelationEntry.from_row(row)
+                MergedRelation.from_row(row)
                 for row in connection.execute(query)
             )
 
@@ -137,7 +148,7 @@ class ExtractedRelationsDatabase:
                 .where(ExtractedRelationEntry.label == label) \
                 .where(ExtractedRelationEntry.pmid.in_(pmids))
 
-            yield from (dict(row) for row in connection.execute(query))
+            yield from (RelationPmidProb.from_row(row) for row in connection.execute(query))
 
     def get_relation_types(self) -> Iterator[str]:
         with self.db_engine.connect() as connection:

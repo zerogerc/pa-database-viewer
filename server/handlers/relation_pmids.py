@@ -1,6 +1,7 @@
 import json
 from typing import Any, Dict
 
+import attr
 import tornado
 from tornado import httputil
 from tornado.web import RequestHandler
@@ -23,5 +24,5 @@ class RelationPmidsHandler(BaseRequestHandler):
             id1=params['id1'], id2=params['id2'], label=params['label'],
             pmids=params['pmids'])
         self.send_response({
-            "pmidProbs": list(pmid_probs)
+            "pmidProbs": [attr.asdict(pp) for pp in pmid_probs]
         })
