@@ -17,7 +17,7 @@ export function RelationTypeCountsChart(props: RelationTypeCountsChartProps) {
             return
         }
 
-        new Chart(chartElement, {
+        const chart = new Chart(chartElement, {
             type: 'bar',
             data: {
                 labels: createLabels(props.counts),
@@ -46,6 +46,10 @@ export function RelationTypeCountsChart(props: RelationTypeCountsChartProps) {
                 }
             }
         });
+
+        return () => {
+            chart.destroy();
+        };
     });
 
     return <canvas id={elementId} width={100} height={100}/>

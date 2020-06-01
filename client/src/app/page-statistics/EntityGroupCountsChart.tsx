@@ -18,7 +18,7 @@ export function EntityGroupCountsChart(props: EntityGroupCountsChartProps) {
             return
         }
 
-        new Chart(chartElement, {
+        const chart = new Chart(chartElement, {
             type: 'horizontalBar',
             data: {
                 labels: ['CHEMICAL', 'GENE', 'DISEASE'],
@@ -54,6 +54,10 @@ export function EntityGroupCountsChart(props: EntityGroupCountsChartProps) {
                 }
             }
         });
+
+        return () => {
+            chart.destroy();
+        };
     });
 
     return <canvas id={elementId} width={200} height={100}/>

@@ -18,7 +18,7 @@ export function EntityGroupTopChart(props: EntityGroupTopChartProps) {
             return
         }
 
-        new Chart(chartElement, {
+        const chart = new Chart(chartElement, {
             type: 'horizontalBar',
             data: {
                 labels: props.top.map((value) => value.eid),
@@ -46,6 +46,10 @@ export function EntityGroupTopChart(props: EntityGroupTopChartProps) {
                 }
             }
         });
+
+        return () => {
+            chart.destroy();
+        };
     });
 
     return <canvas id={elementId} width={150} height={100}/>
