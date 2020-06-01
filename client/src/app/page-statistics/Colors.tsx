@@ -1,4 +1,4 @@
-interface BarColor {
+export interface BarColor {
     background: string
     border: string
 }

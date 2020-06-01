@@ -5,6 +5,8 @@ import {$relationsFormStore, $statsStore} from '../store';
 import {fetchStats} from '../api';
 import {useStore} from 'effector-react';
 import {EntityGroupCountsChart} from './EntityGroupCountsChart';
+import {EntityGroupTopChart} from './EntityGroupTopChart';
+import {CHEMICAL_COLOR, DISEASE_COLOR, GENE_COLOR} from './Colors';
 
 export function StatisticsPage() {
     const statsStore = useStore($statsStore);
@@ -21,6 +23,7 @@ export function StatisticsPage() {
             <hr/>
 
             <h3>Entity Group Statistics</h3>
+            <hr/>
             <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr'}}>
                 <div>
                     <EntityGroupCountsChart
@@ -35,6 +38,26 @@ export function StatisticsPage() {
                         chemicals={statsStore.stats.chemicals.total}
                         genes={statsStore.stats.genes.total}
                         diseases={statsStore.stats.diseases.total}/>
+                </div>
+            </div>
+
+            <h3>Entity Identifiers with Highest Number of Relations</h3>
+            <hr/>
+            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr'}}>
+                <div>
+                    <EntityGroupTopChart
+                        title='Chemicals' color={CHEMICAL_COLOR}
+                        top={statsStore.stats.chemicals.top}/>
+                </div>
+                <div>
+                    <EntityGroupTopChart
+                        title='Genes' color={GENE_COLOR}
+                        top={statsStore.stats.genes.top}/>
+                </div>
+                <div>
+                    <EntityGroupTopChart
+                        title='Diseases' color={DISEASE_COLOR}
+                        top={statsStore.stats.diseases.top}/>
                 </div>
             </div>
 
