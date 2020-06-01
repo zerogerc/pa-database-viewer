@@ -14,3 +14,7 @@ I will host this database on a server in the future.
 ## Debugging
 Run server with `make run-debug`, then go to client directory and call `yarn start` to run UI in debug mode.
 
+## Docker image
+
+`docker build -t pa-viewer .`
+`docker run --publish 8888:8888 --detach --name pa-view-test pa-viewer`
