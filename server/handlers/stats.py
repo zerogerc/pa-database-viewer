@@ -1,6 +1,7 @@
 import logging
 from typing import Any, Dict
 
+import attr
 import tornado
 from tornado import httputil
 from tornado.web import RequestHandler
@@ -22,14 +23,5 @@ class StatsHandler(BaseRequestHandler):
 
     def get(self) -> None:
         collection = self.get_argument('collection', default='')
-        relation_type_stats = self.relations_collections[collection].stats
-
-        self.send_response({
-            'rTypeCounts': [
-                {
-                    'rType': rc.r_type,
-                    'counts': rc.counts
-                }
-                for rc in relation_type_stats.counts
-            ],
-        })
+        stats = self.relations_collections[collection].stats
+        self.send_response(attr.asdict(stats, recurse=True))

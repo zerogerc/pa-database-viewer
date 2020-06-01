@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Dict, Optional
 
 from server.data.relations import ExtractedRelationsDatabase
-from server.data.stats import RTypesStats
+from server.data.stats import CollectionStats
 from server.data.suggest import SuggestDatabase
 
 
@@ -27,8 +27,8 @@ class CollectionData:
         return self._suggest_db
 
     @property
-    def stats(self) -> RTypesStats:
-        return RTypesStats.from_json(json.loads(self.path_stats.read_text()))
+    def stats(self) -> CollectionStats:
+        return CollectionStats.from_dict(json.loads(self.path_stats.read_text()))
 
     @property
     def path_relations_db(self) -> Path:

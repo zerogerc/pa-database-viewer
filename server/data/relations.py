@@ -34,6 +34,9 @@ class ExtractedRelationEntry(Base):
         self.prob = prob
         self.in_ctd = in_ctd
 
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class BioEntity:
@@ -99,6 +102,11 @@ class ExtractedRelationsDatabase:
         session = self.session_maker()
         session.query(ExtractedRelationEntry).delete()
         session.commit()
+
+    def get_extracted_relations(self) -> Iterator[ExtractedRelationEntry]:
+        session = self.session_maker()
+        query = select([ExtractedRelationEntry])
+        yield from (ExtractedRelationEntry(**dict(row)) for row in session.connection().execute(query))
 
     def get_entity_pairs(self) -> Iterator[Tuple[BioEntity, BioEntity]]:
         with self.db_engine.connect() as connection:
