@@ -92,7 +92,14 @@ $relationPmidProbsStore
 
 export const $statsStore: Store<FetchStatsResponse> =
     createStore<FetchStatsResponse>({
-        rTypeCounts: []
+        stats: {
+            totalRelations: 0,
+            rTypeCounts: [],
+            totalEntities: 0,
+            chemicals: {total: 0, relations: 0, top: []},
+            genes: {total: 0, relations: 0, top: []},
+            diseases: {total: 0, relations: 0, top: []},
+        }
     });
 
 export const clearStatsStore = createEvent<void>('clear stats');
@@ -100,7 +107,16 @@ export const clearStatsStore = createEvent<void>('clear stats');
 $statsStore
     .on(fetchStats.done, (state, fetchResult) => fetchResult.result)
     .on(clearStatsStore, () => {
-        return {rTypeCounts: []}
+        return {
+            stats: {
+                totalRelations: 0,
+                rTypeCounts: [],
+                totalEntities: 0,
+                chemicals: {total: 0, relations: 0, top: []},
+                genes: {total: 0, relations: 0, top: []},
+                diseases: {total: 0, relations: 0, top: []},
+            }
+        }
     });
 
 export const $entitySuggestStore: Store<FetchEntitySuggestResponse> =

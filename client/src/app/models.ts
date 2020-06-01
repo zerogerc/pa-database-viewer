@@ -34,12 +34,32 @@ export interface RelationPapersPageStore {
     label?: string
 }
 
+export interface EntitySuggestItem {
+    id: string
+    name: string
+}
+
 export interface RTypeCounts {
     rType: string
     counts: number[]
 }
 
-export interface EntitySuggestItem {
-    id: string,
-    name: string
+export interface EntityIdCount {
+    eid: string
+    count: number
+}
+
+export interface EntityGroupCounts {
+    total: number
+    relations: number
+    top: EntityIdCount[]
+}
+
+export interface CollectionStats {
+    totalRelations: number
+    rTypeCounts: RTypeCounts[]
+    totalEntities: number
+    chemicals: EntityGroupCounts
+    genes: EntityGroupCounts
+    diseases: EntityGroupCounts
 }

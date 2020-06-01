@@ -1,5 +1,5 @@
 import axios, {AxiosInstance} from 'axios';
-import {EntitySuggestItem, PmidWithProb, MergedRelation, RTypeCounts} from './models';
+import {CollectionStats, EntitySuggestItem, MergedRelation, PmidWithProb} from './models';
 import {createEffect} from 'effector';
 
 export interface FetchCollectionsParams {
@@ -69,14 +69,26 @@ export interface FetchStatsParams {
 }
 
 export interface FetchStatsResponse {
-    rTypeCounts: RTypeCounts[]
+    stats: CollectionStats
 }
 
 export const fetchStats =
     createEffect<FetchStatsParams, FetchStatsResponse>({
         async handler(params: FetchStatsParams) {
             const res = await Endpoint.Instance().axiosInstance.get('/api/stats', {params: params});
-            return res.data;
+            const rawData = res.data['stats'];
+
+            const stats: CollectionStats = {
+                totalRelations: rawData['total_relations'],
+                rTypeCounts: rawData['r_type_counts'].map((raw: any) => {
+                    return {rType: raw['r_type'], counts: raw['counts']};
+                }),
+                totalEntities: rawData['total_entities'],
+                chemicals: rawData['chemicals'],
+                genes: rawData['genes'],
+                diseases: rawData['diseases']
+            };
+            return {stats: stats}
         }
     });
 

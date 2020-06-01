@@ -24,4 +24,6 @@ class StatsHandler(BaseRequestHandler):
     def get(self) -> None:
         collection = self.get_argument('collection', default='')
         stats = self.relations_collections[collection].stats
-        self.send_response(attr.asdict(stats, recurse=True))
+        self.send_response({
+            'stats': attr.asdict(stats, recurse=True)
+        })

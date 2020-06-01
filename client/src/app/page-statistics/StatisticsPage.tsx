@@ -15,7 +15,7 @@ export function StatisticsPage() {
 
     return (
         <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr'}}>
-            {statsStore.rTypeCounts.map((rTypeCounts) =>
+            {statsStore.stats.rTypeCounts.map((rTypeCounts) =>
                 <div>
                     <RelationTypeCountsChart rType={rTypeCounts.rType} counts={rTypeCounts.counts}/>
                 </div>
