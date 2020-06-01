@@ -16,7 +16,7 @@ export function RelationsTable(props: { relations: Array<MergedRelation> }) {
         )}
         <ul className="RelationsTable-List colored-list">
             {props.relations.map((item: MergedRelation) => {
-                return <li>
+                return <li key={item.entity1.id + item.entity2.id + item.label}>
                     {createRelationsRow(
                         <EntityView entity={item.entity1}/>,
                         <EntityView entity={item.entity2}/>,

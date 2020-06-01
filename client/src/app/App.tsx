@@ -11,7 +11,7 @@ import {useStore} from 'effector-react';
 export function App() {
     const collectionsStore = useStore($collectionsStore);
     let app = <></>;
-    if (collectionsStore.collections.length != 0) {
+    if (collectionsStore.collections.length !== 0) {
         app =
             <Switch>
                 <Route exact path="/" component={RelationsPage}/>

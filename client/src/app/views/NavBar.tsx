@@ -10,7 +10,7 @@ export function NavBar() {
     const relationsFormStore = useStore($relationsFormStore);
 
     useEffect(() => {
-        if (collectionsStore.collections.length == 0) {
+        if (collectionsStore.collections.length === 0) {
             fetchCollections({});
         }
     });
@@ -20,9 +20,10 @@ export function NavBar() {
             <nav className="NavBar navbar navbar-dark bg-dark">
                 <form className="form-inline">
                     {collectionsStore.collections.map((name: string) => {
-                        const btnClass = relationsFormStore.collection == name ? "btn-info" : "btn-outline-info";
+                        const btnClass = relationsFormStore.collection === name ? "btn-info" : "btn-outline-info";
                         return <button
                             className={"btn btn-sm " + btnClass}
+                            key={name}
                             type="button"
                             onClick={() => relationsFormApi.setCollection(name)}>
                             {name}

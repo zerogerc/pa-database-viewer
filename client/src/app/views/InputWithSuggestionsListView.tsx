@@ -25,7 +25,7 @@ export function InputWithSuggestionsListView(props: InputWithSuggestionsListView
     };
 
     const handleInputFocus = () => {
-        if (props.entityId != "") {
+        if (props.entityId !== "") {
             setOpen(true);
         }
     };

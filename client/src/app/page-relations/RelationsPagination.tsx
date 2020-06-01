@@ -4,7 +4,7 @@ import {relationsFormApi} from '../store';
 export function RelationsPagination(props: { page: number, totalPages: number, onPageSelected: () => void }): React.ReactElement {
 
     const selectPage = (page: number) => {
-        if (page == props.page) {
+        if (page === props.page) {
             return;
         }
         relationsFormApi.setPage(page);
@@ -25,7 +25,7 @@ export function RelationsPagination(props: { page: number, totalPages: number, o
     }
 
     for (let number = startPage; number <= endPage; number++) {
-        const activeClassName = number == props.page ? " active" : "";
+        const activeClassName = number === props.page ? " active" : "";
         const _number = number;
         pages.push(<PageLink key={`${number}`} text={`${number + 1}`} className={activeClassName}
                              onClick={() => selectPage(_number)}/>);
@@ -44,9 +44,9 @@ export function RelationsPagination(props: { page: number, totalPages: number, o
         </ul>);
 }
 
-export function PageLink(props: { key: string, text: string, className?: string, onClick?: () => void }) {
+export function PageLink(props: { text: string, className?: string, onClick?: () => void }) {
     const pageClassName = "page-item" + (props.className != null ? props.className : "");
-    return (<li key={props.key} className={pageClassName}>
+    return (<li className={pageClassName}>
         <span className="page-link" onClick={props.onClick}>{props.text}</span>
     </li>);
 }

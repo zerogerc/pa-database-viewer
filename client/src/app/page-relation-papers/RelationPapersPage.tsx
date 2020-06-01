@@ -1,19 +1,13 @@
 import * as React from 'react';
 import './RelationPapersPage.css';
 import {useStore} from 'effector-react';
-import {$relationPapersPageStore, $relationPmidProbsStore, clearRelationPmidProbsStore} from '../store';
+import {$relationPapersPageStore, $relationPmidProbsStore} from '../store';
 import {PubmedPaperView} from '../views/PubmedPaperView';
 import {EntityView} from '../views/EntityView';
 
 export function RelationPapersPage() {
     const pageStore = useStore($relationPapersPageStore);
     const pmidProbsStore = useStore($relationPmidProbsStore);
-
-    React.useEffect(() => {
-        return () => {
-            clearRelationPmidProbsStore();
-        }
-    }, [pmidProbsStore.pmidProbs]);
 
     return (
         <div>
@@ -24,7 +18,9 @@ export function RelationPapersPage() {
             </div>
             <ul className="colored-list no-bullets-list">
                 {pmidProbsStore.pmidProbs.sort((a, b) => b.prob - a.prob).map(
-                    (pmidProb) => <li><PubmedPaperView pmid={pmidProb.pmid} prob={pmidProb.prob}/></li>
+                    (pmidProb) => <li key={pmidProb.pmid}>
+                        <PubmedPaperView pmid={pmidProb.pmid} prob={pmidProb.prob}/>
+                    </li>
                 )}
             </ul>
         </div>

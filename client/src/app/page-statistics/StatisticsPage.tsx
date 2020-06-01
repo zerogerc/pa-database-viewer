@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {useEffect} from 'react';
-import {Chart} from 'chart.js';
 import {RelationTypeCountsChart} from './RelationTypeCountsChart';
 import {$relationsFormStore, $statsStore} from '../store';
 import {fetchStats} from '../api';

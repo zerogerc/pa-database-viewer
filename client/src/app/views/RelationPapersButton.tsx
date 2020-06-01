@@ -21,7 +21,7 @@ export function RelationPapersButton(props: { head: Entity, tail: Entity, label:
                       pmids: props.pmids
                   })
               }}>
-            {props.pmids.length} {props.pmids.length == 1 ? 'paper' : 'papers'}
+            {props.pmids.length} {props.pmids.length === 1 ? 'paper' : 'papers'}
         </Link>
     </div>
 }

@@ -131,7 +131,7 @@ export const $collectionsStore: Store<FetchCollectionsResponse> =
 
 $collectionsStore
     .on(fetchCollections.done, (state, fetchResult) => {
-        if (fetchResult.result.collections.length == 0) {
+        if (fetchResult.result.collections.length === 0) {
             relationsFormApi.setCollection('');
         } else {
             relationsFormApi.setCollection(fetchResult.result.collections[0]);
