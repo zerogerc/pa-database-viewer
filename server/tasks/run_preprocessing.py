@@ -4,6 +4,7 @@ from pathlib import Path
 
 from server.collection import read_collections
 from server.tasks.calculate_stats import CalculateStatsTask
+from server.tasks.create_relations_db import CreateRelationsDbTask
 from server.tasks.create_suggest import CreateSuggestDbTask
 
 
@@ -17,6 +18,7 @@ def main():
     collections = read_collections(Path(args.collections_dir))
     for name, collection_data in collections.items():
         tasks = [
+            CreateRelationsDbTask(collection_data, override_previous=args.override_previous),
             CreateSuggestDbTask(collection_data, override_previous=args.override_previous),
             CalculateStatsTask(collection_data, override_previous=args.override_previous)
         ]

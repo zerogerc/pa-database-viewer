@@ -2,3 +2,4 @@ attrs
 tornado
 sqlalchemy
 pytest
+tqdm

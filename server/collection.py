@@ -31,6 +31,10 @@ class CollectionData:
         return CollectionStats.from_dict(json.loads(self.path_stats.read_text()))
 
     @property
+    def path_relations_tsv(self) -> Path:
+        return self.root / 'relations.tsv.gz'
+
+    @property
     def path_relations_db(self) -> Path:
         return self.root / 'relations.db'
 

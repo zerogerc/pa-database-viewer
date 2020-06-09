@@ -18,7 +18,6 @@ class StatsHandler(BaseRequestHandler):
                  request: httputil.HTTPServerRequest, *, relations_collections: Dict[str, CollectionData],
                  **kwargs: Any) -> None:
         super().__init__(application, request, **kwargs)
-        self.relations_per_page = 10
         self.relations_collections = relations_collections
 
     def get(self) -> None:
