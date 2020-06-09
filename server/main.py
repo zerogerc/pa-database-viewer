@@ -33,15 +33,15 @@ def main():
     collections = read_collections(Path(options.collections_dir))
 
     handlers = [
-        (f'/api/relations', RelationsHandler, dict(relations_collections=collections)),
-        (f'/api/relation-pmids', RelationPmidsHandler, dict(relations_collections=collections)),
-        (f'/api/stats', StatsHandler, dict(relations_collections=collections)),
-        (f'/api/suggest', SuggestHandler, dict(relations_collections=collections)),
-        (f'/api/collections', CollectionsHandler, dict(relations_collections=collections))
+        (f'/re-viewer/api/relations', RelationsHandler, dict(relations_collections=collections)),
+        (f'/re-viewer/api/relation-pmids', RelationPmidsHandler, dict(relations_collections=collections)),
+        (f'/re-viewer/api/stats', StatsHandler, dict(relations_collections=collections)),
+        (f'/re-viewer/api/suggest', SuggestHandler, dict(relations_collections=collections)),
+        (f'/re-viewer/api/collections', CollectionsHandler, dict(relations_collections=collections))
     ]
     if not options.debug:
-        handlers.append((r'/static/(.*)', tornado.web.StaticFileHandler, {'path': Path(options.static_dir)}))
-        handlers.append((r'/.*', MainHandler, dict(index_path=Path(options.index_path))))
+        handlers.append((r'/re-viewer/static/(.*)', tornado.web.StaticFileHandler, {'path': Path(options.static_dir)}))
+        handlers.append((r'/re-viewer/.*', MainHandler, dict(index_path=Path(options.index_path))))
 
     app = Application(handlers)
     http_server = HTTPServer(app)

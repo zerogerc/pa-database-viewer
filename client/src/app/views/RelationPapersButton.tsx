@@ -7,7 +7,7 @@ import {Entity} from '../models';
 export function RelationPapersButton(props: { head: Entity, tail: Entity, label: string, pmids: string[] }) {
     return <div>
         <Link className="btn btn-outline-info"
-              to={`/papers`}
+              to={`${process.env.PUBLIC_URL}/papers`}
               onClick={() => {
                   relationPapersPageStoreApi.setStore({
                       head: props.head,

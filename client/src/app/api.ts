@@ -117,9 +117,9 @@ export class Endpoint {
 
     constructor() {
         if (process.env.NODE_ENV !== "production") {
-            this.baseUrl = `${window.location.protocol}//localhost:8888`;
+            this.baseUrl = `${window.location.protocol}//localhost:8888/re-viewer`;
         } else {
-            this.baseUrl = `${window.location.protocol}//${window.location.host}`;
+            this.baseUrl = `${window.location.protocol}//${window.location.host}/re-viewer`;
         }
         this.axiosInstance = axios.create({baseURL: this.baseUrl})
     }

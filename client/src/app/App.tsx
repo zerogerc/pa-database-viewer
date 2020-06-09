@@ -14,9 +14,9 @@ export function App() {
     if (collectionsStore.collections.length !== 0) {
         app =
             <Switch>
-                <Route exact path="/" component={RelationsPage}/>
-                <Route exact path="/papers" component={RelationPapersPage}/>
-                <Route exact path="/stats" component={StatisticsPage}/>
+                <Route exact path={`${process.env.PUBLIC_URL}/`} component={RelationsPage}/>
+                <Route exact path={`${process.env.PUBLIC_URL}/papers`} component={RelationPapersPage}/>
+                <Route exact path={`${process.env.PUBLIC_URL}/stats`} component={StatisticsPage}/>
             </Switch>
     }
     return (
