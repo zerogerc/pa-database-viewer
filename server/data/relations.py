@@ -1,3 +1,4 @@
+import sqlite3
 from pathlib import Path
 from typing import Any, Iterator, Optional, Tuple, Dict, List
 
@@ -5,6 +6,7 @@ import attr
 from sqlalchemy import create_engine, Column, Float, String, select, func, Integer, desc
 from sqlalchemy.orm import sessionmaker
 
+from server.data.aggregate import RelationProbMerger
 from server.data.base import Base
 from server.entities import SUPPORTED_ENTITY_GROUPS
 
@@ -90,7 +92,13 @@ COLUMNS_ENTITY_2 = [ExtractedRelationEntry.name2, ExtractedRelationEntry.id2, Ex
 class ExtractedRelationsDatabase:
 
     def __init__(self, db_path: Path):
-        self.db_engine = create_engine('sqlite:///{}'.format(db_path))
+        def creator():
+            conn = sqlite3.connect(str(db_path.resolve()))
+            conn.create_aggregate('merge_prob', 1, RelationProbMerger)
+            conn.commit()
+            return conn
+
+        self.db_engine = create_engine('sqlite:///{}'.format(db_path), creator=creator)
         self.session_maker = sessionmaker(bind=self.db_engine)
 
     def insert_entries(self, entries: List[ExtractedRelationEntry]):
@@ -127,7 +135,7 @@ class ExtractedRelationsDatabase:
                 ExtractedRelationEntry.name2, ExtractedRelationEntry.id2, ExtractedRelationEntry.group2,
                 ExtractedRelationEntry.label,
                 func.group_concat(ExtractedRelationEntry.pmid.distinct()).label('pmids'),
-                func.max(ExtractedRelationEntry.prob).label('prob'),
+                func.merge_prob(ExtractedRelationEntry.prob).label('prob'),
             ])
 
             if id1:

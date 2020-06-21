@@ -46,6 +46,7 @@ export const fetchRawExtractedRelations =
     });
 
 export interface FetchRelationPmidProbsParams {
+    collection: string
     id1: string
     id2: string
     label: string

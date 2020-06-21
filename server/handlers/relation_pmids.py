@@ -20,7 +20,9 @@ class RelationPmidsHandler(BaseRequestHandler):
 
     def post(self):
         params = json.loads(self.request.body)
-        pmid_probs = self.relations_collections['LitCovid'].relations_db.get_relation_pmid_probs(
+        collection = params.get('collection', 'LitCovid')
+
+        pmid_probs = self.relations_collections[collection].relations_db.get_relation_pmid_probs(
             id1=params['id1'], id2=params['id2'], label=params['label'],
             pmids=params['pmids'])
         self.send_response({
