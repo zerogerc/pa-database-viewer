@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import List
 
-from sqlalchemy import Column, String, create_engine, select
+from sqlalchemy import Column, String, create_engine
 from sqlalchemy.orm import sessionmaker
 
 from server.data.base import Base
@@ -52,27 +52,3 @@ class SuggestDatabase:
     def suggest(self, query: str) -> List[SuggestEntry]:
         session = self.session_maker()
         return session.query(SuggestEntry).filter(SuggestEntry.name.like(query + '%'))[0:10]
-
-
-def main():
-    db = SuggestDatabase(Path('/Users/Uladzislau.Sazanovich/dev/pa-database-viewer/data/suggest-temp.db'))
-    db.insert_entries([
-        SuggestEntry('123', 'chemical', 'chemical'),
-        SuggestEntry('123', 'chemical', 'chemical'),
-        SuggestEntry('123', 'chemical', 'chemical'),
-        SuggestEntry('124', 'chemicalX', 'chemical'),
-    ])
-
-    query = select([SuggestEntry.name])
-    with db.engine.connect() as connection:
-        print([row[SuggestEntry.name.key] for row in connection.execute(query)])
-
-    result = db.suggest('n')
-    print(result)
-
-    result = db.suggest('c')
-    print(result)
-
-
-if __name__ == '__main__':
-    main()
